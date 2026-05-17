@@ -11,3 +11,4 @@
 * Reduce the idea to a single clear product sentence.
 
 **Gate:** Can you explain the product in one sentence?
+
