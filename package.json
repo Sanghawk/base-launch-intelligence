@@ -11,7 +11,8 @@
     "typecheck": "pnpm -r typecheck",
     "lint": "echo \"Linting deferred for M0; use pnpm typecheck for now.\"",
     "format": "prettier . --write",
-    "format:check": "prettier . --check"
+    "format:check": "prettier . --check",
+    "seed:issues": "tsx scripts/seed-github-issues.ts"
   },
   "engines": {
     "node": ">=20"
@@ -19,6 +20,8 @@
   "devDependencies": {
     "@types/node": "^25.8.0",
     "prettier": "3.8.3",
-    "typescript": "^6.0.3"
+    "tsx": "^4.22.1",
+    "typescript": "^6.0.3",
+    "yaml": "^2.9.0"
   }
 }
