@@ -1,0 +1,82 @@
+[
+    {
+        "chainId": "base",
+        "dexId": "uniswap",
+        "url": "https://dexscreener.com/base/0xa85fc1dbcf5ba13229914ff5445979d85af1424c47218bf5bcd0aac044a6d975",
+        "pairAddress": "0xa85fc1dbcf5ba13229914ff5445979d85af1424c47218bf5bcd0aac044a6d975",
+        "labels": [
+            "v4"
+        ],
+        "baseToken": {
+            "address": "0x9CdfA959d5306CeC078CA3aC0aD0d8a40ca89B07",
+            "name": "aeonbook",
+            "symbol": "aeonbook"
+        },
+        "quoteToken": {
+            "address": "0x4200000000000000000000000000000000000006",
+            "name": "Wrapped Ether",
+            "symbol": "WETH"
+        },
+        "priceNative": "0.0000000002647",
+        "priceUsd": "0.0000005663",
+        "txns": {
+            "m5": {
+                "buys": 31,
+                "sells": 75
+            },
+            "h1": {
+                "buys": 167,
+                "sells": 209
+            },
+            "h6": {
+                "buys": 167,
+                "sells": 209
+            },
+            "h24": {
+                "buys": 167,
+                "sells": 209
+            }
+        },
+        "volume": {
+            "h24": 41924.32,
+            "h6": 41924.32,
+            "h1": 41924.32,
+            "m5": 9630.68
+        },
+        "priceChange": {
+            "m5": -48.08,
+            "h1": 1434,
+            "h6": 1434,
+            "h24": 1434
+        },
+        "liquidity": {
+            "usd": 19322.73,
+            "base": 17676226914,
+            "quote": 4.3522
+        },
+        "fdv": 56636,
+        "marketCap": 56636,
+        "pairCreatedAt": 1779148729000,
+        "info": {
+            "imageUrl": "https://cdn.dexscreener.com/cms/images/SD0t39bZapVdvUSp?width=800&height=800&quality=95&format=auto",
+            "header": "https://cdn.dexscreener.com/cms/images/PXvpJSCnDJZEEmfN?width=1500&height=500&quality=95&format=auto",
+            "openGraph": "https://cdn.dexscreener.com/token-images/og/base/0x9cdfa959d5306cec078ca3ac0ad0d8a40ca89b07?timestamp=1779151200000",
+            "websites": [
+                {
+                    "url": "https://www.aeonbook.ai/",
+                    "label": "Website"
+                },
+                {
+                    "url": "https://github.com/proxima424/westworld",
+                    "label": "Docs"
+                }
+            ],
+            "socials": [
+                {
+                    "url": "https://x.com/aeonbook_",
+                    "type": "twitter"
+                }
+            ]
+        }
+    }
+]

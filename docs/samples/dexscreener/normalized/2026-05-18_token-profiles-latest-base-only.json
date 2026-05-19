@@ -1,0 +1,86 @@
+[
+  {
+    "url": "https://dexscreener.com/base/0x9cdfa959d5306cec078ca3ac0ad0d8a40ca89b07",
+    "chainId": "base",
+    "tokenAddress": "0x9CdfA959d5306CeC078CA3aC0aD0d8a40ca89B07",
+    "icon": "https://cdn.dexscreener.com/cms/images/SD0t39bZapVdvUSp?width=64&height=64&fit=crop&quality=95&format=auto",
+    "header": "https://cdn.dexscreener.com/cms/images/gdRWeQeY-fiQLfKv?width=600&height=200&fit=crop&quality=95&format=auto",
+    "openGraph": "https://cdn.dexscreener.com/token-images/og/base/0x9cdfa959d5306cec078ca3ac0ad0d8a40ca89b07?timestamp=1779150300000",
+    "description": "Open-source autonomous social media for AI agents. Think of it like a primordial soup of incorporeal evolution.",
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://www.aeonbook.ai/"
+      },
+      {
+        "label": "Docs",
+        "url": "https://github.com/proxima424/westworld"
+      },
+      {
+        "type": "twitter",
+        "url": "https://x.com/aeonbook_"
+      }
+    ],
+    "cto": false,
+    "updatedAt": "2026-05-19T00:24:07.530Z"
+  },
+  {
+    "url": "https://dexscreener.com/base/0xf999dd0d8b0726ab366e775cdf877a020d3e5953",
+    "chainId": "base",
+    "tokenAddress": "0xF999Dd0D8B0726Ab366e775CdF877a020d3E5953",
+    "icon": "https://cdn.dexscreener.com/cms/images/NOViHUR3tVRcwzTf?width=64&height=64&fit=crop&quality=95&format=auto",
+    "header": "https://cdn.dexscreener.com/cms/images/cg6NOXj-ooL76EsV?width=600&height=200&fit=crop&quality=95&format=auto",
+    "openGraph": "https://cdn.dexscreener.com/token-images/og/base/0xf999dd0d8b0726ab366e775cdf877a020d3e5953?timestamp=1779150300000",
+    "description": "Higgsfield AI is a one-stop workspace where creators generate pro-level images and videos using top models (like Sora 2, Kling, Veo), with built-in camera controls, character consistency, and marketing tools — perfect for turning ideas into ready-to-post social ads, UGC, or cinematic clips without switching apps or doing heavy editing.",
+    "links": [
+      {
+        "type": "twitter",
+        "url": "https://x.com/HiggsfieldMCP"
+      }
+    ],
+    "cto": false,
+    "updatedAt": "2026-05-19T00:15:07.506Z"
+  },
+  {
+    "url": "https://dexscreener.com/base/0xf1e9baa65d418a9025e1851dd2d37f1ad208bba3",
+    "chainId": "base",
+    "tokenAddress": "0xf1e9Baa65d418A9025e1851DD2D37f1AD208bba3",
+    "icon": "https://cdn.dexscreener.com/cms/images/O5LdmfSH_OApGgBs?width=64&height=64&fit=crop&quality=95&format=auto",
+    "header": "https://cdn.dexscreener.com/cms/images/MwNbtsOZVkaDKzIT?width=600&height=200&fit=crop&quality=95&format=auto",
+    "openGraph": "https://cdn.dexscreener.com/token-images/og/base/0xf1e9baa65d418a9025e1851dd2d37f1ad208bba3?timestamp=1779150300000",
+    "description": "RatSpeak Live",
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://ratspeak.live/"
+      },
+      {
+        "type": "telegram",
+        "url": "https://t.me/ratspeak"
+      }
+    ],
+    "cto": false,
+    "updatedAt": "2026-05-18T23:40:37.441Z"
+  },
+  {
+    "url": "https://dexscreener.com/base/0x7b4e1ab625d3e8b72bc166148d43b41452804341",
+    "chainId": "base",
+    "tokenAddress": "0x7b4e1AB625d3e8b72bC166148d43b41452804341",
+    "icon": "https://cdn.dexscreener.com/cms/images/o8-xkg5mUw_K0yRq?width=64&height=64&fit=crop&quality=95&format=auto",
+    "header": "https://cdn.dexscreener.com/cms/images/Jjijs53ng_afctVv?width=600&height=200&fit=crop&quality=95&format=auto",
+    "openGraph": "https://cdn.dexscreener.com/token-images/og/base/0x7b4e1ab625d3e8b72bc166148d43b41452804341?timestamp=1779150300000",
+    "description": "A new app I created mainly for crypto trends and news",
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://miniapp-generator-fid-1161802-260326184937079.neynar.app/"
+      },
+      {
+        "type": "twitter",
+        "url": "https://x.com/getCryptoFlow"
+      }
+    ],
+    "cto": false,
+    "updatedAt": "2026-05-18T23:22:37.359Z"
+  }
+]
