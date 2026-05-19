@@ -4,11 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "echo \"worker app not scaffolded yet\"",
+    "dev": "tsx src/index.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "@base-launch-intelligence/db": "workspace:*",
     "@base-launch-intelligence/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "latest"
   }
 }
