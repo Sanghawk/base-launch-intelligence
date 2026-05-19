@@ -12,14 +12,11 @@
     "lint": "echo \"Linting deferred for M0; use pnpm typecheck for now.\"",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-<<<<<<< 24-m1-add-drizzle-dependencies-and-database-config
     "db:check": "tsx scripts/check-db.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
-=======
+    "db:studio": "drizzle-kit studio",
     "seed:issues": "tsx scripts/seed-github-issues.ts"
->>>>>>> main
   },
   "engines": {
     "node": ">=20"
@@ -29,16 +26,9 @@
     "dotenv": "^17.4.2",
     "drizzle-kit": "^0.31.10",
     "prettier": "3.8.3",
-<<<<<<< 24-m1-add-drizzle-dependencies-and-database-config
     "tsx": "^4.22.2",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "yaml": "^2.9.0"
   },
   "packageManager": "pnpm@10.13.1+sha512.37ebf1a5c7a30d5fabe0c5df44ee8da4c965ca0c5af3dbab28c3a1681b70a256218d05c81c9c0dcf767ef6b8551eb5b960042b9ed4300c59242336377e01cfad"
 }
-=======
-    "tsx": "^4.22.1",
-    "typescript": "^6.0.3",
-    "yaml": "^2.9.0"
-  }
-}
->>>>>>> main
