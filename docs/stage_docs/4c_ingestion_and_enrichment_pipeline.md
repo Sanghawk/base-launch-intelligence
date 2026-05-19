@@ -27,17 +27,17 @@ The goal is to validate a useful internal ranked feed, not to build a comprehens
 
 ## In scope for v0
 
-| Capability | v0 Decision |
-|---|---|
-| Discovery | DEX Screener first |
-| Market enrichment | DEX Screener primary |
-| Pool cross-check | GeckoTerminal optional |
-| Contract risk | GoPlus primary |
+| Capability            | v0 Decision                                                          |
+| --------------------- | -------------------------------------------------------------------- |
+| Discovery             | DEX Screener first                                                   |
+| Market enrichment     | DEX Screener primary                                                 |
+| Pool cross-check      | GeckoTerminal optional                                               |
+| Contract risk         | GoPlus primary                                                       |
 | Deployer/verification | Basescan if available; otherwise GoPlus creator field / RPC fallback |
-| Onchain reads | Base RPC targeted reads only |
-| Scoring | Rule-based, explainable |
-| Alerts | High-score and obvious high-risk only |
-| Cadence | 3-minute worker loop |
+| Onchain reads         | Base RPC targeted reads only                                         |
+| Scoring               | Rule-based, explainable                                              |
+| Alerts                | High-score and obvious high-risk only                                |
+| Cadence               | 3-minute worker loop                                                 |
 
 ## Out of scope for v0
 
@@ -328,12 +328,12 @@ else:
 
 ## Discovery failure behavior
 
-| Failure | Behavior |
-|---|---|
-| DEX Screener unavailable | Store error in `source_observations`; complete run as `partial_failure` or `failure` depending on whether cached candidates can be processed |
-| No candidates returned | Complete run successfully with zero candidates |
-| Candidate missing token address | Store raw observation; skip normalized token insert |
-| Candidate missing pool address | Insert token if address exists; market enrichment may resolve pool later |
+| Failure                         | Behavior                                                                                                                                     |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| DEX Screener unavailable        | Store error in `source_observations`; complete run as `partial_failure` or `failure` depending on whether cached candidates can be processed |
+| No candidates returned          | Complete run successfully with zero candidates                                                                                               |
+| Candidate missing token address | Store raw observation; skip normalized token insert                                                                                          |
+| Candidate missing pool address  | Insert token if address exists; market enrichment may resolve pool later                                                                     |
 
 ---
 
@@ -491,10 +491,10 @@ a manual debug flag requests cross-checking
 Suggested v0 staleness thresholds:
 
 | Token tier | Fresh if market data is newer than |
-|---|---:|
-| Hot | 5 minutes |
-| Warm | 15 minutes |
-| Cold | 60+ minutes or ignored |
+| ---------- | ---------------------------------: |
+| Hot        |                          5 minutes |
+| Warm       |                         15 minutes |
+| Cold       |             60+ minutes or ignored |
 
 These thresholds are for UI/scoring confidence, not strict job scheduling.
 
@@ -558,11 +558,11 @@ risk_summary
 
 ## Suggested risk recheck policy
 
-| Token tier | Risk recheck cadence |
-|---|---:|
-| New token | immediately |
-| Hot token | every 15-30 minutes |
-| Warm token | every 2-6 hours |
+| Token tier |           Risk recheck cadence |
+| ---------- | -----------------------------: |
+| New token  |                    immediately |
+| Hot token  |            every 15-30 minutes |
+| Warm token |                every 2-6 hours |
 | Cold token | stop unless manually refreshed |
 
 ## Critical risk candidates
@@ -710,22 +710,22 @@ canonical_reason
 
 Score each pool candidate using:
 
-| Factor | Why it matters |
-|---|---|
-| Highest reliable liquidity | Usually strongest primary-pool signal |
-| Quote asset quality | WETH/USDC stronger than obscure quotes |
-| Known DEX venue | Known venues are easier to interpret |
-| Pair age | Useful for launch-stage context |
+| Factor                                   | Why it matters                          |
+| ---------------------------------------- | --------------------------------------- |
+| Highest reliable liquidity               | Usually strongest primary-pool signal   |
+| Quote asset quality                      | WETH/USDC stronger than obscure quotes  |
+| Known DEX venue                          | Known venues are easier to interpret    |
+| Pair age                                 | Useful for launch-stage context         |
 | Reasonable volume/liquidity relationship | Helps avoid obvious wash/noise patterns |
-| DEX Screener / GeckoTerminal agreement | Improves confidence when available |
+| DEX Screener / GeckoTerminal agreement   | Improves confidence when available      |
 
 ## Suggested quote-asset quality tiers
 
-| Tier | Symbols |
-|---|---|
-| Strong | `WETH`, `USDC` |
-| Medium | `USDbC`, `DAI`, `cbBTC` |
-| Weak/unknown | Everything else |
+| Tier         | Symbols                 |
+| ------------ | ----------------------- |
+| Strong       | `WETH`, `USDC`          |
+| Medium       | `USDbC`, `DAI`, `cbBTC` |
+| Weak/unknown | Everything else         |
 
 ## Canonical confidence rules
 
@@ -801,7 +801,12 @@ type TokenScore = {
   liquidityQualityScore: number;
   deployerHistoryScore: number;
   overallScore: number;
-  triageLabel: 'Ignore' | 'Risky' | 'Watch' | 'Research Deeper' | 'High Priority';
+  triageLabel:
+    | 'Ignore'
+    | 'Risky'
+    | 'Watch'
+    | 'Research Deeper'
+    | 'High Priority';
   confidence: 'low' | 'medium' | 'high';
   reasonSummary: string;
   reasonDetails: string[];
@@ -919,25 +924,25 @@ Worker run every 3 minutes
 
 ## Source cadence
 
-| Step | Cadence | Notes |
-|---|---:|---|
-| DEX Screener discovery | every run | Main candidate source |
-| DEX Screener market refresh | every run for hot tokens | Start simple |
-| GoPlus risk check | first seen, then periodic | Avoid provider spam |
-| Basescan deployer/verification | first seen, then periodic if missing | Optional API key |
-| GeckoTerminal cross-check | on demand or every 5-15 minutes | Optional |
-| Base RPC reads | on demand | Fallback only |
-| Canonical pool selection | after market updates | Cheap |
-| Scoring | every run for processed tokens | Cheap |
-| Alert evaluation | after scoring | Deduped |
+| Step                           |                              Cadence | Notes                 |
+| ------------------------------ | -----------------------------------: | --------------------- |
+| DEX Screener discovery         |                            every run | Main candidate source |
+| DEX Screener market refresh    |             every run for hot tokens | Start simple          |
+| GoPlus risk check              |            first seen, then periodic | Avoid provider spam   |
+| Basescan deployer/verification | first seen, then periodic if missing | Optional API key      |
+| GeckoTerminal cross-check      |      on demand or every 5-15 minutes | Optional              |
+| Base RPC reads                 |                            on demand | Fallback only         |
+| Canonical pool selection       |                 after market updates | Cheap                 |
+| Scoring                        |       every run for processed tokens | Cheap                 |
+| Alert evaluation               |                        after scoring | Deduped               |
 
 ## Token tiers
 
-| Tier | Definition | Behavior |
-|---|---|---|
-| Hot | first seen in last 60 minutes | refresh market every run; prioritize enrichment |
-| Warm | first seen in last 24 hours | refresh less often after basic loop works |
-| Cold | older than 24 hours or ignored | reduce refresh or stop |
+| Tier | Definition                     | Behavior                                        |
+| ---- | ------------------------------ | ----------------------------------------------- |
+| Hot  | first seen in last 60 minutes  | refresh market every run; prioritize enrichment |
+| Warm | first seen in last 24 hours    | refresh less often after basic loop works       |
+| Cold | older than 24 hours or ignored | reduce refresh or stop                          |
 
 The first implementation can refresh all recent candidates every run. Token-tier scheduling can be added once the basic loop works.
 
@@ -1011,16 +1016,16 @@ scoring_error
 
 ## Provider error behavior
 
-| Error | Behavior |
-|---|---|
-| Network timeout | Store source observation with error; retry with backoff if cheap |
-| HTTP 429 / rate limit | Store error; back off provider; continue run |
-| Parse error | Store raw payload and parse error; skip normalized write for that payload |
-| Missing token address | Store raw payload; skip candidate |
-| Missing optional field | Store normalized row with null field |
-| Basescan unavailable | Use GoPlus/RPC fallback or unknown deployer |
-| GeckoTerminal unavailable | Continue with DEX Screener only |
-| GoPlus unavailable | Risk unknown; lower confidence |
+| Error                     | Behavior                                                                  |
+| ------------------------- | ------------------------------------------------------------------------- |
+| Network timeout           | Store source observation with error; retry with backoff if cheap          |
+| HTTP 429 / rate limit     | Store error; back off provider; continue run                              |
+| Parse error               | Store raw payload and parse error; skip normalized write for that payload |
+| Missing token address     | Store raw payload; skip candidate                                         |
+| Missing optional field    | Store normalized row with null field                                      |
+| Basescan unavailable      | Use GoPlus/RPC fallback or unknown deployer                               |
+| GeckoTerminal unavailable | Continue with DEX Screener only                                           |
+| GoPlus unavailable        | Risk unknown; lower confidence                                            |
 
 ## Retry policy
 
@@ -1049,13 +1054,13 @@ Do not build a complex retry/queue system for v0.
 
 ## Suggested per-run caps
 
-| Step | Starting cap |
-|---|---:|
-| Candidates processed | 50-100 |
-| GoPlus checks | 50 |
-| Basescan checks | 25 |
-| GeckoTerminal cross-checks | 10-20 |
-| RPC fallback reads | 25 |
+| Step                       | Starting cap |
+| -------------------------- | -----------: |
+| Candidates processed       |       50-100 |
+| GoPlus checks              |           50 |
+| Basescan checks            |           25 |
+| GeckoTerminal cross-checks |        10-20 |
+| RPC fallback reads         |           25 |
 
 These are starting values. Adjust after real smoke tests.
 
@@ -1283,4 +1288,3 @@ This document is implementation-ready when the build can proceed without further
 - alert deduplication
 - worker cadence
 - raw payload storage
-

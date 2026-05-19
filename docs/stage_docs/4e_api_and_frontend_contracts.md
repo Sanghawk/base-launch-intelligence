@@ -65,15 +65,15 @@ The response should contain one row per token, using the latest score and latest
 
 ## Query parameters
 
-| Parameter | Type | Required | Default | Notes |
-|---|---|---:|---|---|
-| `limit` | number | No | `100` | Max rows to return. |
-| `label` | string | No | none | Filter by triage label. |
-| `minScore` | number | No | none | Filter by minimum overall score. |
-| `includeRisky` | boolean | No | `true` | Whether to include `Risky` rows. |
-| `includeIgnored` | boolean | No | `true` | Whether to include `Ignore` rows. |
-| `freshness` | string | No | `recent` | `recent`, `all`, or `stale`. |
-| `sort` | string | No | `triage` | `triage`, `score`, `newest`, `liquidity`, `risk`. |
+| Parameter        | Type    | Required | Default  | Notes                                             |
+| ---------------- | ------- | -------: | -------- | ------------------------------------------------- |
+| `limit`          | number  |       No | `100`    | Max rows to return.                               |
+| `label`          | string  |       No | none     | Filter by triage label.                           |
+| `minScore`       | number  |       No | none     | Filter by minimum overall score.                  |
+| `includeRisky`   | boolean |       No | `true`   | Whether to include `Risky` rows.                  |
+| `includeIgnored` | boolean |       No | `true`   | Whether to include `Ignore` rows.                 |
+| `freshness`      | string  |       No | `recent` | `recent`, `all`, or `stale`.                      |
+| `sort`           | string  |       No | `triage` | `triage`, `score`, `newest`, `liquidity`, `risk`. |
 
 For the first implementation, only `limit` is mandatory. The other parameters can be ignored until the base table works.
 
@@ -89,13 +89,13 @@ Default `sort=triage` should order rows by:
 
 Suggested triage priority:
 
-| Label | Sort priority |
-|---|---:|
-| `High Priority` | `1` |
-| `Research Deeper` | `2` |
-| `Watch` | `3` |
-| `Risky` | `4` |
-| `Ignore` | `5` |
+| Label             | Sort priority |
+| ----------------- | ------------: |
+| `High Priority`   |           `1` |
+| `Research Deeper` |           `2` |
+| `Watch`           |           `3` |
+| `Risky`           |           `4` |
+| `Ignore`          |           `5` |
 
 This intentionally puts `Risky` below `Watch` for the main workflow while still showing risk flags.
 
@@ -410,12 +410,12 @@ Return recent alert rows for dashboard flags or a simple alerts panel.
 
 ## Query parameters
 
-| Parameter | Type | Required | Default | Notes |
-|---|---|---:|---|---|
-| `limit` | number | No | `50` | Max alerts to return. |
-| `unacknowledgedOnly` | boolean | No | `false` | Acknowledgement can be deferred. |
-| `type` | string | No | none | Filter by alert type. |
-| `severity` | string | No | none | Filter by severity. |
+| Parameter            | Type    | Required | Default | Notes                            |
+| -------------------- | ------- | -------: | ------- | -------------------------------- |
+| `limit`              | number  |       No | `50`    | Max alerts to return.            |
+| `unacknowledgedOnly` | boolean |       No | `false` | Acknowledgement can be deferred. |
+| `type`               | string  |       No | none    | Filter by alert type.            |
+| `severity`           | string  |       No | none    | Filter by severity.              |
 
 ## Response type
 
@@ -625,12 +625,12 @@ Example:
 
 Recommended HTTP statuses:
 
-| Scenario | Status |
-|---|---:|
-| Invalid query parameter | `400` |
-| Database unavailable | `503` |
-| Unexpected server error | `500` |
-| Endpoint not implemented | `501` |
+| Scenario                 | Status |
+| ------------------------ | -----: |
+| Invalid query parameter  |  `400` |
+| Database unavailable     |  `503` |
+| Unexpected server error  |  `500` |
+| Endpoint not implemented |  `501` |
 
 ---
 
@@ -661,24 +661,24 @@ The main screen is a table with one row per launch/token.
 
 Required columns:
 
-| Column | Source field |
-|---|---|
-| Rank | `rank` |
-| Token | `token.symbol`, `token.name`, `token.address` |
-| Age | `token.firstSeenAt` or `pool.pairCreatedAt` |
-| Pool | `pool.address`, `pool.dexId`, `pool.quoteTokenSymbol` |
-| Liquidity | `market.liquidityUsd` |
-| Volume | `market.volume5mUsd`, `market.volume1hUsd`, or `market.volume24hUsd` |
-| Score | `score.overallScore` |
-| Label | `score.triageLabel` |
-| Confidence | `score.confidence` |
-| Contract risk | `summaries.contractRiskSummary` |
-| Liquidity quality | `summaries.liquidityQualitySummary` |
-| Deployer | `summaries.deployerHistorySummary`, `token.deployerAddress` |
-| Reason | `score.reasonSummary` |
-| Updated | `freshness.lastUpdatedAt` |
-| Links | `links.*` |
-| Alert | `alert` |
+| Column            | Source field                                                         |
+| ----------------- | -------------------------------------------------------------------- |
+| Rank              | `rank`                                                               |
+| Token             | `token.symbol`, `token.name`, `token.address`                        |
+| Age               | `token.firstSeenAt` or `pool.pairCreatedAt`                          |
+| Pool              | `pool.address`, `pool.dexId`, `pool.quoteTokenSymbol`                |
+| Liquidity         | `market.liquidityUsd`                                                |
+| Volume            | `market.volume5mUsd`, `market.volume1hUsd`, or `market.volume24hUsd` |
+| Score             | `score.overallScore`                                                 |
+| Label             | `score.triageLabel`                                                  |
+| Confidence        | `score.confidence`                                                   |
+| Contract risk     | `summaries.contractRiskSummary`                                      |
+| Liquidity quality | `summaries.liquidityQualitySummary`                                  |
+| Deployer          | `summaries.deployerHistorySummary`, `token.deployerAddress`          |
+| Reason            | `score.reasonSummary`                                                |
+| Updated           | `freshness.lastUpdatedAt`                                            |
+| Links             | `links.*`                                                            |
+| Alert             | `alert`                                                              |
 
 ## Recommended MVP table column order
 
@@ -724,9 +724,7 @@ export type TriageLabel =
 
 export type ConfidenceLevel = 'low' | 'medium' | 'high';
 
-export type AlertType =
-  | 'new_high_score_launch'
-  | 'obvious_high_risk_launch';
+export type AlertType = 'new_high_score_launch' | 'obvious_high_risk_launch';
 
 export type AlertSeverity = 'low' | 'medium' | 'high' | 'critical';
 ```
@@ -753,13 +751,13 @@ But preserve full address in:
 
 Format USD fields:
 
-| Value | Display |
-|---:|---|
-| `null` | `—` |
-| `< 1` | `<$1` |
-| `1–999` | `$123` |
+|           Value | Display  |
+| --------------: | -------- |
+|          `null` | `—`      |
+|           `< 1` | `<$1`    |
+|         `1–999` | `$123`   |
 | `1,000–999,999` | `$12.3k` |
-| `>= 1,000,000` | `$1.2m` |
+|  `>= 1,000,000` | `$1.2m`  |
 
 ## Scores
 
@@ -816,27 +814,27 @@ Suggested status rules:
 
 ## Market data
 
-| Age | Status |
-|---:|---|
-| `<= 5 minutes` | `fresh` |
-| `5–30 minutes` | `stale` |
-| missing | `missing` |
+|            Age | Status    |
+| -------------: | --------- |
+| `<= 5 minutes` | `fresh`   |
+| `5–30 minutes` | `stale`   |
+|        missing | `missing` |
 
 ## Risk data
 
-| Age | Status |
-|---:|---|
-| `<= 30 minutes` for new/hot tokens | `fresh` |
-| `30 minutes–6 hours` | `stale` |
-| missing | `missing` |
+|                                Age | Status    |
+| ---------------------------------: | --------- |
+| `<= 30 minutes` for new/hot tokens | `fresh`   |
+|               `30 minutes–6 hours` | `stale`   |
+|                            missing | `missing` |
 
 ## Score
 
-| Age | Status |
-|---:|---|
-| `<= 5 minutes` | `fresh` |
-| `5–30 minutes` | `stale` |
-| missing | `missing` |
+|            Age | Status    |
+| -------------: | --------- |
+| `<= 5 minutes` | `fresh`   |
+| `5–30 minutes` | `stale`   |
+|        missing | `missing` |
 
 The UI should show stale/missing statuses plainly.
 
@@ -902,16 +900,16 @@ apps/web/src/lib/format.ts
 
 ## Component responsibilities
 
-| Component | Responsibility |
-|---|---|
-| `LaunchFeedTable` | Render table headers and rows. |
-| `LaunchFeedRow` | Render one `LaunchFeedRow`. |
-| `TriageLabelBadge` | Display triage label as text + minimal styling. |
-| `ScoreCell` | Display overall and optional component scores. |
-| `ConfidenceCell` | Display confidence and stale/missing flags. |
-| `AddressLink` | Compact address display and external link/copy support. |
-| `ExternalLinksCell` | Links to DEX Screener, Basescan, etc. |
-| `HealthBanner` | Show degraded worker/provider state. |
+| Component           | Responsibility                                          |
+| ------------------- | ------------------------------------------------------- |
+| `LaunchFeedTable`   | Render table headers and rows.                          |
+| `LaunchFeedRow`     | Render one `LaunchFeedRow`.                             |
+| `TriageLabelBadge`  | Display triage label as text + minimal styling.         |
+| `ScoreCell`         | Display overall and optional component scores.          |
+| `ConfidenceCell`    | Display confidence and stale/missing flags.             |
+| `AddressLink`       | Compact address display and external link/copy support. |
+| `ExternalLinksCell` | Links to DEX Screener, Basescan, etc.                   |
+| `HealthBanner`      | Show degraded worker/provider state.                    |
 
 ---
 

@@ -14,18 +14,18 @@ The MVP is not trying to build a full trading terminal, execution bot, copytradi
 
 ## Stage 3 Decisions
 
-| Area | Decision |
-|---|---|
-| Frontend | Next.js |
-| Backend | Node/TypeScript by default |
-| Rust | Defer unless a specific bottleneck appears |
-| Database | Postgres |
-| Hosting | Local first; later Vercel + hosted DB if useful |
-| API budget | Free first; paid only if a free path blocks the MVP |
-| Farcaster/Neynar | Deferred from v0 and Stage 3 testing |
-| API keys | None currently available |
+| Area                           | Decision                                                       |
+| ------------------------------ | -------------------------------------------------------------- |
+| Frontend                       | Next.js                                                        |
+| Backend                        | Node/TypeScript by default                                     |
+| Rust                           | Defer unless a specific bottleneck appears                     |
+| Database                       | Postgres                                                       |
+| Hosting                        | Local first; later Vercel + hosted DB if useful                |
+| API budget                     | Free first; paid only if a free path blocks the MVP            |
+| Farcaster/Neynar               | Deferred from v0 and Stage 3 testing                           |
+| API keys                       | None currently available                                       |
 | Technical discovery strictness | Lightweight docs only, with recommended smoke tests documented |
-| Data freshness target | 1–5 minutes |
+| Data freshness target          | 1–5 minutes                                                    |
 
 ---
 
@@ -45,68 +45,68 @@ Supporting data is also required for token identity, launch timing, pair/pool co
 
 ### Token Identity
 
-| Field | Required? | Notes |
-|---|---:|---|
-| Chain ID | Yes | Base chain ID: `8453` |
-| Token address | Yes | Primary join key |
-| Token name | Yes | Display only; not trusted for identity |
-| Token symbol | Yes | Display only; can be spoofed |
-| Decimals | Yes | Needed for normalized balances |
-| First seen timestamp | Yes | Internal observation timestamp |
-| Creation transaction | Nice-to-have | Useful for deployer history |
-| Deployer address | Yes | Needed for deployer-history score |
+| Field                |    Required? | Notes                                  |
+| -------------------- | -----------: | -------------------------------------- |
+| Chain ID             |          Yes | Base chain ID: `8453`                  |
+| Token address        |          Yes | Primary join key                       |
+| Token name           |          Yes | Display only; not trusted for identity |
+| Token symbol         |          Yes | Display only; can be spoofed           |
+| Decimals             |          Yes | Needed for normalized balances         |
+| First seen timestamp |          Yes | Internal observation timestamp         |
+| Creation transaction | Nice-to-have | Useful for deployer history            |
+| Deployer address     |          Yes | Needed for deployer-history score      |
 
 ### Market / Pair / Pool Data
 
-| Field | Required? | Notes |
-|---|---:|---|
-| Pair/pool address | Yes | Needed to link market data |
-| DEX venue | Yes | Aerodrome, Uniswap, etc. |
-| Base token / quote token | Yes | Needed for quote-asset quality |
-| Pair creation time | Yes | Useful for launch age |
-| Liquidity USD | Yes | Raw signal, not sufficient alone |
-| Volume windows | Yes | Useful but gameable |
-| Transaction counts | Nice-to-have | Useful context |
-| Price USD | Yes | Display/context |
-| FDV / market cap | Nice-to-have | Must be confidence-adjusted |
+| Field                        |    Required? | Notes                                                          |
+| ---------------------------- | -----------: | -------------------------------------------------------------- |
+| Pair/pool address            |          Yes | Needed to link market data                                     |
+| DEX venue                    |          Yes | Aerodrome, Uniswap, etc.                                       |
+| Base token / quote token     |          Yes | Needed for quote-asset quality                                 |
+| Pair creation time           |          Yes | Useful for launch age                                          |
+| Liquidity USD                |          Yes | Raw signal, not sufficient alone                               |
+| Volume windows               |          Yes | Useful but gameable                                            |
+| Transaction counts           | Nice-to-have | Useful context                                                 |
+| Price USD                    |          Yes | Display/context                                                |
+| FDV / market cap             | Nice-to-have | Must be confidence-adjusted                                    |
 | Paid boost / promotion flags | Nice-to-have | Useful to avoid mistaking paid visibility for organic interest |
 
 ### Contract Risk Data
 
-| Field | Required? | Notes |
-|---|---:|---|
-| Contract verification status | Yes | Basic trust/risk input |
-| Honeypot risk | Yes | Mandatory filter if available |
-| Buy/sell tax | Yes | Mandatory filter if available |
-| Mutable tax | Yes | High-risk flag |
-| Blacklist/whitelist logic | Yes | High-risk flag |
-| Mint authority | Yes | High-risk flag |
-| Owner/admin privileges | Yes | High-risk flag |
-| Proxy/upgradeability indicators | Nice-to-have | Important but may require deeper inspection |
-| LP lock/burn status | Nice-to-have | Useful but should not be treated as sufficient safety |
+| Field                           |    Required? | Notes                                                 |
+| ------------------------------- | -----------: | ----------------------------------------------------- |
+| Contract verification status    |          Yes | Basic trust/risk input                                |
+| Honeypot risk                   |          Yes | Mandatory filter if available                         |
+| Buy/sell tax                    |          Yes | Mandatory filter if available                         |
+| Mutable tax                     |          Yes | High-risk flag                                        |
+| Blacklist/whitelist logic       |          Yes | High-risk flag                                        |
+| Mint authority                  |          Yes | High-risk flag                                        |
+| Owner/admin privileges          |          Yes | High-risk flag                                        |
+| Proxy/upgradeability indicators | Nice-to-have | Important but may require deeper inspection           |
+| LP lock/burn status             | Nice-to-have | Useful but should not be treated as sufficient safety |
 
 ### Liquidity Quality Data
 
-| Field | Required? | Notes |
-|---|---:|---|
-| Raw liquidity | Yes | Baseline input |
-| Quote asset | Yes | ETH/USDC stronger than obscure quote assets |
-| Pool age | Yes | Context |
-| Canonical pool confidence | Yes | Needed to avoid scoring wrong pool |
-| Price impact estimate | Nice-to-have v0; stronger v0.5 | Better than nominal liquidity |
-| Liquidity trend | Nice-to-have | Useful after snapshots exist |
-| Multi-pool fragmentation | Nice-to-have | Important but can be added after basic MVP |
+| Field                     |                      Required? | Notes                                       |
+| ------------------------- | -----------------------------: | ------------------------------------------- |
+| Raw liquidity             |                            Yes | Baseline input                              |
+| Quote asset               |                            Yes | ETH/USDC stronger than obscure quote assets |
+| Pool age                  |                            Yes | Context                                     |
+| Canonical pool confidence |                            Yes | Needed to avoid scoring wrong pool          |
+| Price impact estimate     | Nice-to-have v0; stronger v0.5 | Better than nominal liquidity               |
+| Liquidity trend           |                   Nice-to-have | Useful after snapshots exist                |
+| Multi-pool fragmentation  |                   Nice-to-have | Important but can be added after basic MVP  |
 
 ### Deployer History Data
 
-| Field | Required? | Notes |
-|---|---:|---|
-| Deployer address | Yes | Core input |
-| Number of prior deployments | Yes, if feasible | Basic v0 deployer-history signal |
-| Prior token addresses | Nice-to-have | Useful for later enrichment |
-| Prior suspicious launches | Nice-to-have | Likely hard without history |
-| Prior liquidity behavior | Deferred | v0.5+ |
-| Factory relationship | Nice-to-have | Useful for launch-platform classification |
+| Field                       |        Required? | Notes                                     |
+| --------------------------- | ---------------: | ----------------------------------------- |
+| Deployer address            |              Yes | Core input                                |
+| Number of prior deployments | Yes, if feasible | Basic v0 deployer-history signal          |
+| Prior token addresses       |     Nice-to-have | Useful for later enrichment               |
+| Prior suspicious launches   |     Nice-to-have | Likely hard without history               |
+| Prior liquidity behavior    |         Deferred | v0.5+                                     |
+| Factory relationship        |     Nice-to-have | Useful for launch-platform classification |
 
 ---
 
@@ -130,13 +130,13 @@ Likely uses:
 
 ### MVP Fit
 
-| Category | Assessment |
-|---|---|
-| MVP value | High |
-| Cost | Free initially if using public RPC; production providers later |
-| Freshness | Good enough for 1–5 minute MVP target |
-| Complexity | Moderate |
-| Risk | Public endpoints may be rate-limited and unsuitable for production |
+| Category   | Assessment                                                         |
+| ---------- | ------------------------------------------------------------------ |
+| MVP value  | High                                                               |
+| Cost       | Free initially if using public RPC; production providers later     |
+| Freshness  | Good enough for 1–5 minute MVP target                              |
+| Complexity | Moderate                                                           |
+| Risk       | Public endpoints may be rate-limited and unsuitable for production |
 
 ### Recommended MVP Use
 
@@ -167,13 +167,13 @@ Flashblocks can provide faster post-ordering visibility through preconfirmation 
 
 ### MVP Fit
 
-| Category | Assessment |
-|---|---|
-| MVP value | Medium for v0, higher later |
-| Cost | Depends on provider |
-| Freshness | Excellent, but not required for 1–5 minute target |
-| Complexity | Moderate |
-| Risk | Not a public mempool; requires correct mental model and fallback logic |
+| Category   | Assessment                                                             |
+| ---------- | ---------------------------------------------------------------------- |
+| MVP value  | Medium for v0, higher later                                            |
+| Cost       | Depends on provider                                                    |
+| Freshness  | Excellent, but not required for 1–5 minute target                      |
+| Complexity | Moderate                                                               |
+| Risk       | Not a public mempool; requires correct mental model and fallback logic |
 
 ### Recommended MVP Use
 
@@ -206,13 +206,13 @@ Likely uses:
 
 ### MVP Fit
 
-| Category | Assessment |
-|---|---|
-| MVP value | Very high |
-| Cost | Free public API |
-| Freshness | Good enough for dashboard ranking |
-| Complexity | Low |
-| Risk | Can create discovery bias if treated as ground truth |
+| Category   | Assessment                                           |
+| ---------- | ---------------------------------------------------- |
+| MVP value  | Very high                                            |
+| Cost       | Free public API                                      |
+| Freshness  | Good enough for dashboard ranking                    |
+| Complexity | Low                                                  |
+| Risk       | Can create discovery bias if treated as ground truth |
 
 ### Recommended MVP Use
 
@@ -255,13 +255,13 @@ Likely uses:
 
 ### MVP Fit
 
-| Category | Assessment |
-|---|---|
-| MVP value | Medium-high |
-| Cost | Free/public but rate-limited |
-| Freshness | Good enough for minute-level features |
-| Complexity | Low-moderate |
-| Risk | Public rate limits may constrain broad scanning |
+| Category   | Assessment                                      |
+| ---------- | ----------------------------------------------- |
+| MVP value  | Medium-high                                     |
+| Cost       | Free/public but rate-limited                    |
+| Freshness  | Good enough for minute-level features           |
+| Complexity | Low-moderate                                    |
+| Risk       | Public rate limits may constrain broad scanning |
 
 ### Recommended MVP Use
 
@@ -299,13 +299,13 @@ Likely uses:
 
 ### MVP Fit
 
-| Category | Assessment |
-|---|---|
-| MVP value | High |
-| Cost | Free tier likely enough for prototype if key is obtained |
-| Freshness | Good enough for risk/deployer enrichment |
-| Complexity | Low-moderate |
-| Risk | Low throughput; not a stream |
+| Category   | Assessment                                               |
+| ---------- | -------------------------------------------------------- |
+| MVP value  | High                                                     |
+| Cost       | Free tier likely enough for prototype if key is obtained |
+| Freshness  | Good enough for risk/deployer enrichment                 |
+| Complexity | Low-moderate                                             |
+| Risk       | Low throughput; not a stream                             |
 
 ### Recommended MVP Use
 
@@ -346,13 +346,13 @@ Likely uses:
 
 ### MVP Fit
 
-| Category | Assessment |
-|---|---|
-| MVP value | Very high |
-| Cost | Free/public path may be available; confirm before build |
-| Freshness | Good enough for MVP |
-| Complexity | Low |
-| Risk | Scanner output is not ground truth |
+| Category   | Assessment                                              |
+| ---------- | ------------------------------------------------------- |
+| MVP value  | Very high                                               |
+| Cost       | Free/public path may be available; confirm before build |
+| Freshness  | Good enough for MVP                                     |
+| Complexity | Low                                                     |
+| Risk       | Scanner output is not ground truth                      |
 
 ### Recommended MVP Use
 
@@ -377,13 +377,13 @@ TokenSniffer can provide an additional scam/spam and token-risk score.
 
 ### MVP Fit
 
-| Category | Assessment |
-|---|---|
-| MVP value | Medium-high |
-| Cost | Unclear; verify before relying on it |
-| Freshness | Good enough if accessible |
-| Complexity | Low if API access is available |
-| Risk | Pricing/access may be a blocker |
+| Category   | Assessment                           |
+| ---------- | ------------------------------------ |
+| MVP value  | Medium-high                          |
+| Cost       | Unclear; verify before relying on it |
+| Freshness  | Good enough if accessible            |
+| Complexity | Low if API access is available       |
+| Risk       | Pricing/access may be a blocker      |
 
 ### Recommended MVP Use
 
@@ -416,13 +416,13 @@ Likely future uses:
 
 ### MVP Fit
 
-| Category | Assessment |
-|---|---|
-| MVP value | Deferred |
-| Cost | May require key/plan |
-| Freshness | Good enough for social signals |
-| Complexity | Moderate |
-| Risk | Resolver complexity and noisy joins |
+| Category   | Assessment                          |
+| ---------- | ----------------------------------- |
+| MVP value  | Deferred                            |
+| Cost       | May require key/plan                |
+| Freshness  | Good enough for social signals      |
+| Complexity | Moderate                            |
+| Risk       | Resolver complexity and noisy joins |
 
 ### Recommended MVP Use
 
@@ -436,32 +436,32 @@ Revisit in v0.5 after the core ranked feed works with onchain, risk, liquidity, 
 
 ## v0 Required
 
-| Priority | Source | Why |
-|---:|---|---|
-| 1 | DEX Screener | Fastest path to market/pair data |
-| 2 | Base RPC | Required for onchain verification and future ingestion |
-| 3 | GoPlus | Fast contract-risk enrichment |
-| 4 | Basescan | Verification/deployer augmentation |
-| 5 | Postgres | Durable normalized store |
+| Priority | Source       | Why                                                    |
+| -------: | ------------ | ------------------------------------------------------ |
+|        1 | DEX Screener | Fastest path to market/pair data                       |
+|        2 | Base RPC     | Required for onchain verification and future ingestion |
+|        3 | GoPlus       | Fast contract-risk enrichment                          |
+|        4 | Basescan     | Verification/deployer augmentation                     |
+|        5 | Postgres     | Durable normalized store                               |
 
 ## v0 Optional
 
-| Source | Use if |
-|---|---|
-| GeckoTerminal | Needed to cross-check pool/liquidity data |
-| TokenSniffer | Access is easy and free/cheap |
-| Flashblocks RPC | Detection speed becomes important |
+| Source          | Use if                                    |
+| --------------- | ----------------------------------------- |
+| GeckoTerminal   | Needed to cross-check pool/liquidity data |
+| TokenSniffer    | Access is easy and free/cheap             |
+| Flashblocks RPC | Detection speed becomes important         |
 
 ## Deferred
 
-| Source | Defer reason |
-|---|---|
-| Neynar/Farcaster | Social signal deferred to v0.5 |
-| X/Twitter | Too noisy and costly for v0 |
-| Telegram | Weak as a broad input source |
-| Self-hosted Base node | Too much infrastructure for unvalidated MVP |
-| Bitquery | Useful but likely paid/overkill for v0 |
-| The Graph | Useful later for known schemas, not first discovery loop |
+| Source                | Defer reason                                             |
+| --------------------- | -------------------------------------------------------- |
+| Neynar/Farcaster      | Social signal deferred to v0.5                           |
+| X/Twitter             | Too noisy and costly for v0                              |
+| Telegram              | Weak as a broad input source                             |
+| Self-hosted Base node | Too much infrastructure for unvalidated MVP              |
+| Bitquery              | Useful but likely paid/overkill for v0                   |
+| The Graph             | Useful later for known schemas, not first discovery loop |
 
 ---
 
@@ -583,15 +583,15 @@ Then compute:
 
 ## Suggested Refresh Cadence
 
-| Data Type | Suggested Cadence |
-|---|---:|
-| New pairs / launch feed | 1–5 minutes |
-| DEX Screener market data | 1–5 minutes for recent tokens |
-| GeckoTerminal cross-check | 5–15 minutes or on demand |
-| GoPlus risk check | Once at first seen, then occasional recheck |
-| Basescan verification | Once at first seen, then occasional recheck |
-| Deployer history | On first seen, then cached |
-| Old token market updates | Reduce frequency or stop |
+| Data Type                 |                           Suggested Cadence |
+| ------------------------- | ------------------------------------------: |
+| New pairs / launch feed   |                                 1–5 minutes |
+| DEX Screener market data  |               1–5 minutes for recent tokens |
+| GeckoTerminal cross-check |                   5–15 minutes or on demand |
+| GoPlus risk check         | Once at first seen, then occasional recheck |
+| Basescan verification     | Once at first seen, then occasional recheck |
+| Deployer history          |                  On first seen, then cached |
+| Old token market updates  |                    Reduce frequency or stop |
 
 ---
 
