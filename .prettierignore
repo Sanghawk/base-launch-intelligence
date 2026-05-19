@@ -14,3 +14,5 @@ coverage
 
 postgres-data
 pgdata
+
+packages/db/src/migrations

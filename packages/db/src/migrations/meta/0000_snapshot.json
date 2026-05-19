@@ -1,0 +1,1770 @@
+{
+  "id": "b49c2898-12a5-4323-aea6-16ee09b4829a",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.alerts": {
+      "name": "alerts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "token_id": {
+          "name": "token_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token_score_id": {
+          "name": "token_score_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "alert_type": {
+          "name": "alert_type",
+          "type": "alert_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "severity": {
+          "name": "severity",
+          "type": "alert_severity",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "score_at_alert": {
+          "name": "score_at_alert",
+          "type": "numeric(6, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reason_details": {
+          "name": "reason_details",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dedupe_key": {
+          "name": "dedupe_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "state_hash": {
+          "name": "state_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "acknowledged_at": {
+          "name": "acknowledged_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "alerts_created_at_idx": {
+          "name": "alerts_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "alerts_token_created_at_idx": {
+          "name": "alerts_token_created_at_idx",
+          "columns": [
+            {
+              "expression": "token_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "alerts_token_id_tokens_id_fk": {
+          "name": "alerts_token_id_tokens_id_fk",
+          "tableFrom": "alerts",
+          "tableTo": "tokens",
+          "columnsFrom": [
+            "token_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "alerts_token_score_id_token_scores_id_fk": {
+          "name": "alerts_token_score_id_token_scores_id_fk",
+          "tableFrom": "alerts",
+          "tableTo": "token_scores",
+          "columnsFrom": [
+            "token_score_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "alerts_dedupe_key_unique": {
+          "name": "alerts_dedupe_key_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "dedupe_key"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.deployer_history_snapshots": {
+      "name": "deployer_history_snapshots",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "deployer_id": {
+          "name": "deployer_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "prior_contract_count": {
+          "name": "prior_contract_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prior_token_count": {
+          "name": "prior_token_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prior_launch_count": {
+          "name": "prior_launch_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "internal_prior_seen_token_count": {
+          "name": "internal_prior_seen_token_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "verified_contract_count": {
+          "name": "verified_contract_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "suspicious_prior_launch_count": {
+          "name": "suspicious_prior_launch_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "repeated_template_confidence": {
+          "name": "repeated_template_confidence",
+          "type": "confidence_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "history_confidence": {
+          "name": "history_confidence",
+          "type": "confidence_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "summary": {
+          "name": "summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "raw_payload_id": {
+          "name": "raw_payload_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "deployer_history_snapshots_deployer_observed_at_idx": {
+          "name": "deployer_history_snapshots_deployer_observed_at_idx",
+          "columns": [
+            {
+              "expression": "deployer_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "observed_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "deployer_history_snapshots_deployer_id_deployers_id_fk": {
+          "name": "deployer_history_snapshots_deployer_id_deployers_id_fk",
+          "tableFrom": "deployer_history_snapshots",
+          "tableTo": "deployers",
+          "columnsFrom": [
+            "deployer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "deployer_history_snapshots_raw_payload_id_source_observations_id_fk": {
+          "name": "deployer_history_snapshots_raw_payload_id_source_observations_id_fk",
+          "tableFrom": "deployer_history_snapshots",
+          "tableTo": "source_observations",
+          "columnsFrom": [
+            "raw_payload_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.deployers": {
+      "name": "deployers",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "chain_id": {
+          "name": "chain_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "first_seen_at": {
+          "name": "first_seen_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_seen_at": {
+          "name": "last_seen_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "known_label": {
+          "name": "known_label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "deployers_chain_id_address_key": {
+          "name": "deployers_chain_id_address_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "chain_id",
+            "address"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.market_snapshots": {
+      "name": "market_snapshots",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "token_id": {
+          "name": "token_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pool_id": {
+          "name": "pool_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "price_usd": {
+          "name": "price_usd",
+          "type": "numeric(38, 18)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "liquidity_usd": {
+          "name": "liquidity_usd",
+          "type": "numeric(38, 8)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fdv_usd": {
+          "name": "fdv_usd",
+          "type": "numeric(38, 8)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "market_cap_usd": {
+          "name": "market_cap_usd",
+          "type": "numeric(38, 8)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "volume_5m_usd": {
+          "name": "volume_5m_usd",
+          "type": "numeric(38, 8)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "volume_1h_usd": {
+          "name": "volume_1h_usd",
+          "type": "numeric(38, 8)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "volume_6h_usd": {
+          "name": "volume_6h_usd",
+          "type": "numeric(38, 8)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "volume_24h_usd": {
+          "name": "volume_24h_usd",
+          "type": "numeric(38, 8)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "txns_5m_buys": {
+          "name": "txns_5m_buys",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "txns_5m_sells": {
+          "name": "txns_5m_sells",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "txns_1h_buys": {
+          "name": "txns_1h_buys",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "txns_1h_sells": {
+          "name": "txns_1h_sells",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "buyers_5m": {
+          "name": "buyers_5m",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sellers_5m": {
+          "name": "sellers_5m",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "raw_payload_id": {
+          "name": "raw_payload_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "market_snapshots_token_observed_at_idx": {
+          "name": "market_snapshots_token_observed_at_idx",
+          "columns": [
+            {
+              "expression": "token_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "observed_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "market_snapshots_pool_observed_at_idx": {
+          "name": "market_snapshots_pool_observed_at_idx",
+          "columns": [
+            {
+              "expression": "pool_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "observed_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "market_snapshots_token_id_tokens_id_fk": {
+          "name": "market_snapshots_token_id_tokens_id_fk",
+          "tableFrom": "market_snapshots",
+          "tableTo": "tokens",
+          "columnsFrom": [
+            "token_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "market_snapshots_pool_id_pools_id_fk": {
+          "name": "market_snapshots_pool_id_pools_id_fk",
+          "tableFrom": "market_snapshots",
+          "tableTo": "pools",
+          "columnsFrom": [
+            "pool_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "market_snapshots_raw_payload_id_source_observations_id_fk": {
+          "name": "market_snapshots_raw_payload_id_source_observations_id_fk",
+          "tableFrom": "market_snapshots",
+          "tableTo": "source_observations",
+          "columnsFrom": [
+            "raw_payload_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pools": {
+      "name": "pools",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "chain_id": {
+          "name": "chain_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dex_id": {
+          "name": "dex_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "base_token_id": {
+          "name": "base_token_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "base_token_address": {
+          "name": "base_token_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quote_token_address": {
+          "name": "quote_token_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quote_token_symbol": {
+          "name": "quote_token_symbol",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quote_token_name": {
+          "name": "quote_token_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pair_created_at": {
+          "name": "pair_created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "first_seen_at": {
+          "name": "first_seen_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_canonical_candidate": {
+          "name": "is_canonical_candidate",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "canonical_confidence": {
+          "name": "canonical_confidence",
+          "type": "confidence_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'low'"
+        },
+        "canonical_reason": {
+          "name": "canonical_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "pools_base_token_id_idx": {
+          "name": "pools_base_token_id_idx",
+          "columns": [
+            {
+              "expression": "base_token_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "pools_base_token_id_tokens_id_fk": {
+          "name": "pools_base_token_id_tokens_id_fk",
+          "tableFrom": "pools",
+          "tableTo": "tokens",
+          "columnsFrom": [
+            "base_token_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "pools_chain_id_address_key": {
+          "name": "pools_chain_id_address_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "chain_id",
+            "address"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.risk_checks": {
+      "name": "risk_checks",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "token_id": {
+          "name": "token_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_honeypot": {
+          "name": "is_honeypot",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "buy_tax": {
+          "name": "buy_tax",
+          "type": "numeric(10, 4)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sell_tax": {
+          "name": "sell_tax",
+          "type": "numeric(10, 4)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_tax_modifiable": {
+          "name": "is_tax_modifiable",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "has_blacklist": {
+          "name": "has_blacklist",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "has_whitelist": {
+          "name": "has_whitelist",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "can_mint": {
+          "name": "can_mint",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "owner_address": {
+          "name": "owner_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ownership_renounced": {
+          "name": "ownership_renounced",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_proxy": {
+          "name": "is_proxy",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_verified": {
+          "name": "is_verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "top_holder_pct": {
+          "name": "top_holder_pct",
+          "type": "numeric(10, 4)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "top10_holder_pct": {
+          "name": "top10_holder_pct",
+          "type": "numeric(10, 4)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lp_locked_or_burned": {
+          "name": "lp_locked_or_burned",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scanner_score": {
+          "name": "scanner_score",
+          "type": "numeric(10, 4)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "risk_level": {
+          "name": "risk_level",
+          "type": "risk_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'unknown'"
+        },
+        "risk_summary": {
+          "name": "risk_summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "raw_payload_id": {
+          "name": "raw_payload_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "risk_checks_token_observed_at_idx": {
+          "name": "risk_checks_token_observed_at_idx",
+          "columns": [
+            {
+              "expression": "token_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "observed_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "risk_checks_token_id_tokens_id_fk": {
+          "name": "risk_checks_token_id_tokens_id_fk",
+          "tableFrom": "risk_checks",
+          "tableTo": "tokens",
+          "columnsFrom": [
+            "token_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "risk_checks_raw_payload_id_source_observations_id_fk": {
+          "name": "risk_checks_raw_payload_id_source_observations_id_fk",
+          "tableFrom": "risk_checks",
+          "tableTo": "source_observations",
+          "columnsFrom": [
+            "raw_payload_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.source_observations": {
+      "name": "source_observations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entity_type": {
+          "name": "entity_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entity_key": {
+          "name": "entity_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fetched_at": {
+          "name": "fetched_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "request_url": {
+          "name": "request_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "request_params_hash": {
+          "name": "request_params_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "response_status": {
+          "name": "response_status",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "duration_ms": {
+          "name": "duration_ms",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "raw_json": {
+          "name": "raw_json",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "error": {
+          "name": "error",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "error_type": {
+          "name": "error_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "source_observations_entity_fetched_idx": {
+          "name": "source_observations_entity_fetched_idx",
+          "columns": [
+            {
+              "expression": "source",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "entity_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "entity_key",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "fetched_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.token_scores": {
+      "name": "token_scores",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "token_id": {
+          "name": "token_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "canonical_pool_id": {
+          "name": "canonical_pool_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "market_snapshot_id": {
+          "name": "market_snapshot_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "risk_check_id": {
+          "name": "risk_check_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deployer_history_snapshot_id": {
+          "name": "deployer_history_snapshot_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scored_at": {
+          "name": "scored_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contract_risk_score": {
+          "name": "contract_risk_score",
+          "type": "numeric(6, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "liquidity_quality_score": {
+          "name": "liquidity_quality_score",
+          "type": "numeric(6, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "deployer_history_score": {
+          "name": "deployer_history_score",
+          "type": "numeric(6, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "overall_score": {
+          "name": "overall_score",
+          "type": "numeric(6, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "triage_label": {
+          "name": "triage_label",
+          "type": "triage_label",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "confidence": {
+          "name": "confidence",
+          "type": "confidence_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reason_summary": {
+          "name": "reason_summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reason_details": {
+          "name": "reason_details",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "critical_flags": {
+          "name": "critical_flags",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "token_scores_token_scored_at_idx": {
+          "name": "token_scores_token_scored_at_idx",
+          "columns": [
+            {
+              "expression": "token_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "scored_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "token_scores_scored_at_idx": {
+          "name": "token_scores_scored_at_idx",
+          "columns": [
+            {
+              "expression": "scored_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "token_scores_token_id_tokens_id_fk": {
+          "name": "token_scores_token_id_tokens_id_fk",
+          "tableFrom": "token_scores",
+          "tableTo": "tokens",
+          "columnsFrom": [
+            "token_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "token_scores_canonical_pool_id_pools_id_fk": {
+          "name": "token_scores_canonical_pool_id_pools_id_fk",
+          "tableFrom": "token_scores",
+          "tableTo": "pools",
+          "columnsFrom": [
+            "canonical_pool_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "token_scores_market_snapshot_id_market_snapshots_id_fk": {
+          "name": "token_scores_market_snapshot_id_market_snapshots_id_fk",
+          "tableFrom": "token_scores",
+          "tableTo": "market_snapshots",
+          "columnsFrom": [
+            "market_snapshot_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "token_scores_risk_check_id_risk_checks_id_fk": {
+          "name": "token_scores_risk_check_id_risk_checks_id_fk",
+          "tableFrom": "token_scores",
+          "tableTo": "risk_checks",
+          "columnsFrom": [
+            "risk_check_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "token_scores_deployer_history_snapshot_id_deployer_history_snapshots_id_fk": {
+          "name": "token_scores_deployer_history_snapshot_id_deployer_history_snapshots_id_fk",
+          "tableFrom": "token_scores",
+          "tableTo": "deployer_history_snapshots",
+          "columnsFrom": [
+            "deployer_history_snapshot_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.tokens": {
+      "name": "tokens",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "chain_id": {
+          "name": "chain_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "symbol": {
+          "name": "symbol",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "decimals": {
+          "name": "decimals",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_supply_raw": {
+          "name": "total_supply_raw",
+          "type": "numeric(78, 0)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "first_seen_at": {
+          "name": "first_seen_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "first_seen_source": {
+          "name": "first_seen_source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "deployer_id": {
+          "name": "deployer_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deployer_address": {
+          "name": "deployer_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "creation_tx_hash": {
+          "name": "creation_tx_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at_block": {
+          "name": "created_at_block",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at_timestamp": {
+          "name": "created_at_timestamp",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_verified": {
+          "name": "is_verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_proxy": {
+          "name": "is_proxy",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "metadata_confidence": {
+          "name": "metadata_confidence",
+          "type": "confidence_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'low'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "tokens_first_seen_at_idx": {
+          "name": "tokens_first_seen_at_idx",
+          "columns": [
+            {
+              "expression": "first_seen_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "tokens_deployer_id_idx": {
+          "name": "tokens_deployer_id_idx",
+          "columns": [
+            {
+              "expression": "deployer_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "tokens_deployer_id_deployers_id_fk": {
+          "name": "tokens_deployer_id_deployers_id_fk",
+          "tableFrom": "tokens",
+          "tableTo": "deployers",
+          "columnsFrom": [
+            "deployer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "tokens_chain_id_address_key": {
+          "name": "tokens_chain_id_address_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "chain_id",
+            "address"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.worker_runs": {
+      "name": "worker_runs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "completed_at": {
+          "name": "completed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "worker_run_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "candidates_fetched": {
+          "name": "candidates_fetched",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "tokens_inserted": {
+          "name": "tokens_inserted",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "tokens_updated": {
+          "name": "tokens_updated",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "pools_inserted": {
+          "name": "pools_inserted",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "pools_updated": {
+          "name": "pools_updated",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "market_snapshots_inserted": {
+          "name": "market_snapshots_inserted",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "risk_checks_inserted": {
+          "name": "risk_checks_inserted",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "deployer_snapshots_inserted": {
+          "name": "deployer_snapshots_inserted",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "scores_computed": {
+          "name": "scores_computed",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "alerts_created": {
+          "name": "alerts_created",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "provider_error_count": {
+          "name": "provider_error_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "error_summary": {
+          "name": "error_summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "error_details": {
+          "name": "error_details",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "worker_runs_started_at_idx": {
+          "name": "worker_runs_started_at_idx",
+          "columns": [
+            {
+              "expression": "started_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "worker_runs_status_started_at_idx": {
+          "name": "worker_runs_status_started_at_idx",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "started_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.alert_severity": {
+      "name": "alert_severity",
+      "schema": "public",
+      "values": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "public.alert_type": {
+      "name": "alert_type",
+      "schema": "public",
+      "values": [
+        "new_high_score_launch",
+        "obvious_high_risk_launch"
+      ]
+    },
+    "public.confidence_level": {
+      "name": "confidence_level",
+      "schema": "public",
+      "values": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "public.risk_level": {
+      "name": "risk_level",
+      "schema": "public",
+      "values": [
+        "unknown",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "public.triage_label": {
+      "name": "triage_label",
+      "schema": "public",
+      "values": [
+        "Ignore",
+        "Risky",
+        "Watch",
+        "Research Deeper",
+        "High Priority"
+      ]
+    },
+    "public.worker_run_status": {
+      "name": "worker_run_status",
+      "schema": "public",
+      "values": [
+        "running",
+        "success",
+        "partial_failure",
+        "failure"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

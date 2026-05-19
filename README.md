@@ -98,6 +98,38 @@ docker compose down
 
 Do not use `docker compose down -v` unless you intentionally want to delete the local database volume.
 
+## Database migrations
+
+The Drizzle schema lives in `packages/db/src/schema.ts`. Generated SQL migrations are checked into `packages/db/src/migrations/`.
+
+Generate a migration from the current schema:
+
+```bash
+pnpm db:generate
+```
+
+This writes a new `XXXX_<tag>.sql` file plus a snapshot under `packages/db/src/migrations/meta/`. If the schema has not changed, drizzle-kit reports `No schema changes, nothing to migrate` and writes nothing.
+
+Apply pending migrations to the local database:
+
+```bash
+pnpm db:migrate
+```
+
+Drizzle records applied migrations in the `drizzle.__drizzle_migrations` table inside the same database, so re-running `pnpm db:migrate` is idempotent — it applies nothing once everything is up to date.
+
+Open Drizzle Studio to inspect tables and data:
+
+```bash
+pnpm db:studio
+```
+
+### Caveats
+
+- `pnpm db:generate` and `pnpm db:migrate` require `DATABASE_URL` to be set; copy `.env.example` to `.env` first.
+- Re-generating after a schema change produces a new migration file (e.g. `0001_*.sql`) — do **not** edit the existing `0000_*.sql` after it has been applied to any environment. If you need to redo the initial migration locally, drop the `public` and `drizzle` schemas first (`docker compose down -v` resets everything, or `DROP SCHEMA public CASCADE; DROP SCHEMA drizzle CASCADE;` keeps the volume).
+- Migration filenames include a random tag (the part after the index). Regenerating from scratch will produce a different tag — commit the generated files exactly as drizzle-kit emits them.
+
 ## Run the web app
 
 ```bash
@@ -210,10 +242,7 @@ The following are intentionally not implemented yet:
 - GeckoTerminal client
 - Basescan client
 - Base RPC reads
-- real database client
-- Drizzle schema
-- migrations
-- tables, enums, indexes, or health query
+- real database client wiring into the web app and worker
 - source observation persistence
 - scoring logic
 - alert logic
