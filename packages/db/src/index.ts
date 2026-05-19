@@ -7,7 +7,14 @@ export {
   workerRunStatus,
   deployers,
   tokens,
-  pools
+  pools,
+  sourceObservations,
+  marketSnapshots,
+  riskChecks,
+  deployerHistorySnapshots,
+  tokenScores,
+  alerts,
+  workerRuns
 } from './schema.js';
 export type {
   ConfidenceLevel,
@@ -21,6 +28,20 @@ export type {
   Token,
   NewToken,
   Pool,
-  NewPool
+  NewPool,
+  SourceObservation,
+  NewSourceObservation,
+  MarketSnapshot,
+  NewMarketSnapshot,
+  RiskCheck,
+  NewRiskCheck,
+  DeployerHistorySnapshot,
+  NewDeployerHistorySnapshot,
+  TokenScore,
+  NewTokenScore,
+  Alert,
+  NewAlert,
+  WorkerRun,
+  NewWorkerRun
 } from './schema.js';
 export { db, pool } from './client.js';
