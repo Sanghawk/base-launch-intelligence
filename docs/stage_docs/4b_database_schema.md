@@ -115,17 +115,17 @@ Do not rely on token name or symbol as identity. Token names and symbols are dis
 
 ## Naming Conventions
 
-| Area | Convention |
-|---|---|
-| Tables | `snake_case`, plural |
-| Columns | `snake_case` |
+| Area              | Convention                                              |
+| ----------------- | ------------------------------------------------------- |
+| Tables            | `snake_case`, plural                                    |
+| Columns           | `snake_case`                                            |
 | TypeScript fields | `camelCase` through Drizzle mappings or app-level types |
-| Addresses | lowercase hex string |
-| Timestamps | `timestamptz` |
-| Money values | `numeric`, not floating point |
-| Raw payloads | `jsonb` |
-| Confidence fields | enum: `low`, `medium`, `high` |
-| Unknown fields | `NULL`, not magic defaults |
+| Addresses         | lowercase hex string                                    |
+| Timestamps        | `timestamptz`                                           |
+| Money values      | `numeric`, not floating point                           |
+| Raw payloads      | `jsonb`                                                 |
+| Confidence fields | enum: `low`, `medium`, `high`                           |
+| Unknown fields    | `NULL`, not magic defaults                              |
 
 ---
 
@@ -245,27 +245,27 @@ How confident are we in the metadata?
 
 ## Columns
 
-| Column | Type | Nullable | Notes |
-|---|---:|---:|---|
-| `id` | `uuid` | No | Primary key |
-| `chain_id` | `integer` | No | Base = `8453` |
-| `address` | `text` | No | Lowercase token contract address |
-| `name` | `text` | Yes | Display only; spoofable |
-| `symbol` | `text` | Yes | Display only; spoofable |
-| `decimals` | `integer` | Yes | From provider or ERC-20 call |
-| `total_supply_raw` | `numeric(78,0)` | Yes | Optional raw integer supply |
-| `first_seen_at` | `timestamptz` | No | Internal observation timestamp |
-| `first_seen_source` | `text` | No | Example: `dexscreener` |
-| `deployer_id` | `uuid` | Yes | FK to `deployers.id` |
-| `deployer_address` | `text` | Yes | Denormalized for simpler lookup/debugging |
-| `creation_tx_hash` | `text` | Yes | From Basescan/RPC/GoPlus if available |
-| `created_at_block` | `bigint` | Yes | Contract creation block if known |
-| `created_at_timestamp` | `timestamptz` | Yes | Contract creation timestamp if known |
-| `is_verified` | `boolean` | Yes | Source-code verification, if known |
-| `is_proxy` | `boolean` | Yes | Proxy status, if known |
-| `metadata_confidence` | `confidence_level` | No | Default `low` |
-| `created_at` | `timestamptz` | No | Row creation time |
-| `updated_at` | `timestamptz` | No | Row update time |
+| Column                 |               Type | Nullable | Notes                                     |
+| ---------------------- | -----------------: | -------: | ----------------------------------------- |
+| `id`                   |             `uuid` |       No | Primary key                               |
+| `chain_id`             |          `integer` |       No | Base = `8453`                             |
+| `address`              |             `text` |       No | Lowercase token contract address          |
+| `name`                 |             `text` |      Yes | Display only; spoofable                   |
+| `symbol`               |             `text` |      Yes | Display only; spoofable                   |
+| `decimals`             |          `integer` |      Yes | From provider or ERC-20 call              |
+| `total_supply_raw`     |    `numeric(78,0)` |      Yes | Optional raw integer supply               |
+| `first_seen_at`        |      `timestamptz` |       No | Internal observation timestamp            |
+| `first_seen_source`    |             `text` |       No | Example: `dexscreener`                    |
+| `deployer_id`          |             `uuid` |      Yes | FK to `deployers.id`                      |
+| `deployer_address`     |             `text` |      Yes | Denormalized for simpler lookup/debugging |
+| `creation_tx_hash`     |             `text` |      Yes | From Basescan/RPC/GoPlus if available     |
+| `created_at_block`     |           `bigint` |      Yes | Contract creation block if known          |
+| `created_at_timestamp` |      `timestamptz` |      Yes | Contract creation timestamp if known      |
+| `is_verified`          |          `boolean` |      Yes | Source-code verification, if known        |
+| `is_proxy`             |          `boolean` |      Yes | Proxy status, if known                    |
+| `metadata_confidence`  | `confidence_level` |       No | Default `low`                             |
+| `created_at`           |      `timestamptz` |       No | Row creation time                         |
+| `updated_at`           |      `timestamptz` |       No | Row update time                           |
 
 ## Constraints
 
@@ -299,17 +299,17 @@ Canonical record for an address that deployed a token or relevant contract.
 
 ## Columns
 
-| Column | Type | Nullable | Notes |
-|---|---:|---:|---|
-| `id` | `uuid` | No | Primary key |
-| `chain_id` | `integer` | No | Base = `8453` |
-| `address` | `text` | No | Lowercase deployer address |
-| `first_seen_at` | `timestamptz` | No | First time this system saw the deployer |
-| `last_seen_at` | `timestamptz` | No | Last time this system saw the deployer |
-| `known_label` | `text` | Yes | Optional manual/provider label |
-| `source` | `text` | No | First source that identified the deployer |
-| `created_at` | `timestamptz` | No | Row creation time |
-| `updated_at` | `timestamptz` | No | Row update time |
+| Column          |          Type | Nullable | Notes                                     |
+| --------------- | ------------: | -------: | ----------------------------------------- |
+| `id`            |        `uuid` |       No | Primary key                               |
+| `chain_id`      |     `integer` |       No | Base = `8453`                             |
+| `address`       |        `text` |       No | Lowercase deployer address                |
+| `first_seen_at` | `timestamptz` |       No | First time this system saw the deployer   |
+| `last_seen_at`  | `timestamptz` |       No | Last time this system saw the deployer    |
+| `known_label`   |        `text` |      Yes | Optional manual/provider label            |
+| `source`        |        `text` |       No | First source that identified the deployer |
+| `created_at`    | `timestamptz` |       No | Row creation time                         |
+| `updated_at`    | `timestamptz` |       No | Row update time                           |
 
 ## Constraints
 
@@ -342,25 +342,25 @@ A token can have multiple pools. The scoring system should select one canonical 
 
 ## Columns
 
-| Column | Type | Nullable | Notes |
-|---|---:|---:|---|
-| `id` | `uuid` | No | Primary key |
-| `chain_id` | `integer` | No | Base = `8453` |
-| `address` | `text` | No | Lowercase pool/pair address |
-| `dex_id` | `text` | Yes | Example: `uniswap`, `aerodrome`, `pancakeswap` |
-| `base_token_id` | `uuid` | No | FK to `tokens.id`; product token side |
-| `base_token_address` | `text` | No | Denormalized lowercase address |
-| `quote_token_address` | `text` | Yes | Lowercase quote token address |
-| `quote_token_symbol` | `text` | Yes | Example: `WETH`, `USDC` |
-| `quote_token_name` | `text` | Yes | Optional |
-| `pair_created_at` | `timestamptz` | Yes | Provider-derived pool creation time |
-| `first_seen_at` | `timestamptz` | No | Internal first observation |
-| `source` | `text` | No | First source that found the pool |
-| `is_canonical_candidate` | `boolean` | No | Default `false` |
-| `canonical_confidence` | `confidence_level` | No | Default `low` |
-| `canonical_reason` | `text` | Yes | Short explanation of canonical-pool decision |
-| `created_at` | `timestamptz` | No | Row creation time |
-| `updated_at` | `timestamptz` | No | Row update time |
+| Column                   |               Type | Nullable | Notes                                          |
+| ------------------------ | -----------------: | -------: | ---------------------------------------------- |
+| `id`                     |             `uuid` |       No | Primary key                                    |
+| `chain_id`               |          `integer` |       No | Base = `8453`                                  |
+| `address`                |             `text` |       No | Lowercase pool/pair address                    |
+| `dex_id`                 |             `text` |      Yes | Example: `uniswap`, `aerodrome`, `pancakeswap` |
+| `base_token_id`          |             `uuid` |       No | FK to `tokens.id`; product token side          |
+| `base_token_address`     |             `text` |       No | Denormalized lowercase address                 |
+| `quote_token_address`    |             `text` |      Yes | Lowercase quote token address                  |
+| `quote_token_symbol`     |             `text` |      Yes | Example: `WETH`, `USDC`                        |
+| `quote_token_name`       |             `text` |      Yes | Optional                                       |
+| `pair_created_at`        |      `timestamptz` |      Yes | Provider-derived pool creation time            |
+| `first_seen_at`          |      `timestamptz` |       No | Internal first observation                     |
+| `source`                 |             `text` |       No | First source that found the pool               |
+| `is_canonical_candidate` |          `boolean` |       No | Default `false`                                |
+| `canonical_confidence`   | `confidence_level` |       No | Default `low`                                  |
+| `canonical_reason`       |             `text` |      Yes | Short explanation of canonical-pool decision   |
+| `created_at`             |      `timestamptz` |       No | Row creation time                              |
+| `updated_at`             |      `timestamptz` |       No | Row update time                                |
 
 ## Constraints
 
@@ -397,29 +397,29 @@ This table is append-oriented. Do not overwrite past market snapshots.
 
 ## Columns
 
-| Column | Type | Nullable | Notes |
-|---|---:|---:|---|
-| `id` | `uuid` | No | Primary key |
-| `token_id` | `uuid` | No | FK to `tokens.id` |
-| `pool_id` | `uuid` | Yes | FK to `pools.id`; nullable if source is token-level |
-| `source` | `text` | No | `dexscreener`, `geckoterminal`, `rpc`, etc. |
-| `observed_at` | `timestamptz` | No | Time provider response was fetched/observed |
-| `price_usd` | `numeric(38,18)` | Yes | Provider-derived USD price |
-| `liquidity_usd` | `numeric(38,8)` | Yes | Raw liquidity USD |
-| `fdv_usd` | `numeric(38,8)` | Yes | FDV if available; confidence-adjusted downstream |
-| `market_cap_usd` | `numeric(38,8)` | Yes | Market cap if available; confidence-adjusted downstream |
-| `volume_5m_usd` | `numeric(38,8)` | Yes | 5-minute volume |
-| `volume_1h_usd` | `numeric(38,8)` | Yes | 1-hour volume |
-| `volume_6h_usd` | `numeric(38,8)` | Yes | 6-hour volume |
-| `volume_24h_usd` | `numeric(38,8)` | Yes | 24-hour volume |
-| `txns_5m_buys` | `integer` | Yes | 5-minute buys |
-| `txns_5m_sells` | `integer` | Yes | 5-minute sells |
-| `txns_1h_buys` | `integer` | Yes | 1-hour buys |
-| `txns_1h_sells` | `integer` | Yes | 1-hour sells |
-| `buyers_5m` | `integer` | Yes | If provider exposes buyer counts |
-| `sellers_5m` | `integer` | Yes | If provider exposes seller counts |
-| `raw_payload_id` | `uuid` | Yes | FK to `source_observations.id` |
-| `created_at` | `timestamptz` | No | Row creation time |
+| Column           |             Type | Nullable | Notes                                                   |
+| ---------------- | ---------------: | -------: | ------------------------------------------------------- |
+| `id`             |           `uuid` |       No | Primary key                                             |
+| `token_id`       |           `uuid` |       No | FK to `tokens.id`                                       |
+| `pool_id`        |           `uuid` |      Yes | FK to `pools.id`; nullable if source is token-level     |
+| `source`         |           `text` |       No | `dexscreener`, `geckoterminal`, `rpc`, etc.             |
+| `observed_at`    |    `timestamptz` |       No | Time provider response was fetched/observed             |
+| `price_usd`      | `numeric(38,18)` |      Yes | Provider-derived USD price                              |
+| `liquidity_usd`  |  `numeric(38,8)` |      Yes | Raw liquidity USD                                       |
+| `fdv_usd`        |  `numeric(38,8)` |      Yes | FDV if available; confidence-adjusted downstream        |
+| `market_cap_usd` |  `numeric(38,8)` |      Yes | Market cap if available; confidence-adjusted downstream |
+| `volume_5m_usd`  |  `numeric(38,8)` |      Yes | 5-minute volume                                         |
+| `volume_1h_usd`  |  `numeric(38,8)` |      Yes | 1-hour volume                                           |
+| `volume_6h_usd`  |  `numeric(38,8)` |      Yes | 6-hour volume                                           |
+| `volume_24h_usd` |  `numeric(38,8)` |      Yes | 24-hour volume                                          |
+| `txns_5m_buys`   |        `integer` |      Yes | 5-minute buys                                           |
+| `txns_5m_sells`  |        `integer` |      Yes | 5-minute sells                                          |
+| `txns_1h_buys`   |        `integer` |      Yes | 1-hour buys                                             |
+| `txns_1h_sells`  |        `integer` |      Yes | 1-hour sells                                            |
+| `buyers_5m`      |        `integer` |      Yes | If provider exposes buyer counts                        |
+| `sellers_5m`     |        `integer` |      Yes | If provider exposes seller counts                       |
+| `raw_payload_id` |           `uuid` |      Yes | FK to `source_observations.id`                          |
+| `created_at`     |    `timestamptz` |       No | Row creation time                                       |
 
 ## Constraints
 
@@ -459,31 +459,31 @@ This table is append-oriented because risk scanners may update coverage after fi
 
 ## Columns
 
-| Column | Type | Nullable | Notes |
-|---|---:|---:|---|
-| `id` | `uuid` | No | Primary key |
-| `token_id` | `uuid` | No | FK to `tokens.id` |
-| `source` | `text` | No | `goplus`, `tokensniffer`, `basescan`, `manual` |
-| `observed_at` | `timestamptz` | No | Fetch timestamp |
-| `is_honeypot` | `boolean` | Yes | `NULL` means unknown |
-| `buy_tax` | `numeric(10,4)` | Yes | Percent or decimal normalized by app convention |
-| `sell_tax` | `numeric(10,4)` | Yes | Percent or decimal normalized by app convention |
-| `is_tax_modifiable` | `boolean` | Yes | Mutable tax risk |
-| `has_blacklist` | `boolean` | Yes | Blacklist logic flag |
-| `has_whitelist` | `boolean` | Yes | Whitelist logic flag |
-| `can_mint` | `boolean` | Yes | Mint authority risk |
-| `owner_address` | `text` | Yes | Owner/admin if available |
-| `ownership_renounced` | `boolean` | Yes | Provider-derived, not absolute truth |
-| `is_proxy` | `boolean` | Yes | Proxy/upgradeability flag |
-| `is_verified` | `boolean` | Yes | Source verification/open-source flag |
-| `top_holder_pct` | `numeric(10,4)` | Yes | Percent |
-| `top10_holder_pct` | `numeric(10,4)` | Yes | Percent |
-| `lp_locked_or_burned` | `boolean` | Yes | Must not be treated as sufficient safety |
-| `scanner_score` | `numeric(10,4)` | Yes | Provider score if available |
-| `risk_level` | `risk_level` | No | Default `unknown` |
-| `risk_summary` | `text` | Yes | Short normalized summary |
-| `raw_payload_id` | `uuid` | Yes | FK to `source_observations.id` |
-| `created_at` | `timestamptz` | No | Row creation time |
+| Column                |            Type | Nullable | Notes                                           |
+| --------------------- | --------------: | -------: | ----------------------------------------------- |
+| `id`                  |          `uuid` |       No | Primary key                                     |
+| `token_id`            |          `uuid` |       No | FK to `tokens.id`                               |
+| `source`              |          `text` |       No | `goplus`, `tokensniffer`, `basescan`, `manual`  |
+| `observed_at`         |   `timestamptz` |       No | Fetch timestamp                                 |
+| `is_honeypot`         |       `boolean` |      Yes | `NULL` means unknown                            |
+| `buy_tax`             | `numeric(10,4)` |      Yes | Percent or decimal normalized by app convention |
+| `sell_tax`            | `numeric(10,4)` |      Yes | Percent or decimal normalized by app convention |
+| `is_tax_modifiable`   |       `boolean` |      Yes | Mutable tax risk                                |
+| `has_blacklist`       |       `boolean` |      Yes | Blacklist logic flag                            |
+| `has_whitelist`       |       `boolean` |      Yes | Whitelist logic flag                            |
+| `can_mint`            |       `boolean` |      Yes | Mint authority risk                             |
+| `owner_address`       |          `text` |      Yes | Owner/admin if available                        |
+| `ownership_renounced` |       `boolean` |      Yes | Provider-derived, not absolute truth            |
+| `is_proxy`            |       `boolean` |      Yes | Proxy/upgradeability flag                       |
+| `is_verified`         |       `boolean` |      Yes | Source verification/open-source flag            |
+| `top_holder_pct`      | `numeric(10,4)` |      Yes | Percent                                         |
+| `top10_holder_pct`    | `numeric(10,4)` |      Yes | Percent                                         |
+| `lp_locked_or_burned` |       `boolean` |      Yes | Must not be treated as sufficient safety        |
+| `scanner_score`       | `numeric(10,4)` |      Yes | Provider score if available                     |
+| `risk_level`          |    `risk_level` |       No | Default `unknown`                               |
+| `risk_summary`        |          `text` |      Yes | Short normalized summary                        |
+| `raw_payload_id`      |          `uuid` |      Yes | FK to `source_observations.id`                  |
+| `created_at`          |   `timestamptz` |       No | Row creation time                               |
 
 ## Constraints
 
@@ -524,22 +524,22 @@ This table allows the scoring engine to use deployer context without requiring e
 
 ## Columns
 
-| Column | Type | Nullable | Notes |
-|---|---:|---:|---|
-| `id` | `uuid` | No | Primary key |
-| `deployer_id` | `uuid` | No | FK to `deployers.id` |
-| `observed_at` | `timestamptz` | No | Snapshot timestamp |
-| `prior_contract_count` | `integer` | Yes | External/API-derived count if available |
-| `prior_token_count` | `integer` | Yes | External/API-derived token count if available |
-| `prior_launch_count` | `integer` | Yes | Launch count if available |
-| `internal_prior_seen_token_count` | `integer` | No | Count from this system before current token |
-| `verified_contract_count` | `integer` | Yes | If obtainable |
-| `suspicious_prior_launch_count` | `integer` | Yes | v0 likely nullable/placeholder |
-| `repeated_template_confidence` | `confidence_level` | Yes | Optional; can be null in v0 |
-| `history_confidence` | `confidence_level` | No | Confidence in deployer-history summary |
-| `summary` | `text` | Yes | Example: `repeat deployer seen 3 times internally` |
-| `raw_payload_id` | `uuid` | Yes | FK to `source_observations.id` |
-| `created_at` | `timestamptz` | No | Row creation time |
+| Column                            |               Type | Nullable | Notes                                              |
+| --------------------------------- | -----------------: | -------: | -------------------------------------------------- |
+| `id`                              |             `uuid` |       No | Primary key                                        |
+| `deployer_id`                     |             `uuid` |       No | FK to `deployers.id`                               |
+| `observed_at`                     |      `timestamptz` |       No | Snapshot timestamp                                 |
+| `prior_contract_count`            |          `integer` |      Yes | External/API-derived count if available            |
+| `prior_token_count`               |          `integer` |      Yes | External/API-derived token count if available      |
+| `prior_launch_count`              |          `integer` |      Yes | Launch count if available                          |
+| `internal_prior_seen_token_count` |          `integer` |       No | Count from this system before current token        |
+| `verified_contract_count`         |          `integer` |      Yes | If obtainable                                      |
+| `suspicious_prior_launch_count`   |          `integer` |      Yes | v0 likely nullable/placeholder                     |
+| `repeated_template_confidence`    | `confidence_level` |      Yes | Optional; can be null in v0                        |
+| `history_confidence`              | `confidence_level` |       No | Confidence in deployer-history summary             |
+| `summary`                         |             `text` |      Yes | Example: `repeat deployer seen 3 times internally` |
+| `raw_payload_id`                  |             `uuid` |      Yes | FK to `source_observations.id`                     |
+| `created_at`                      |      `timestamptz` |       No | Row creation time                                  |
 
 ## Constraints
 
@@ -585,25 +585,25 @@ reason details
 
 ## Columns
 
-| Column | Type | Nullable | Notes |
-|---|---:|---:|---|
-| `id` | `uuid` | No | Primary key |
-| `token_id` | `uuid` | No | FK to `tokens.id` |
-| `canonical_pool_id` | `uuid` | Yes | FK to `pools.id` |
-| `market_snapshot_id` | `uuid` | Yes | FK to `market_snapshots.id` |
-| `risk_check_id` | `uuid` | Yes | FK to `risk_checks.id` |
-| `deployer_history_snapshot_id` | `uuid` | Yes | FK to `deployer_history_snapshots.id` |
-| `scored_at` | `timestamptz` | No | Score timestamp |
-| `contract_risk_score` | `numeric(6,2)` | No | 0-100; higher is safer/better |
-| `liquidity_quality_score` | `numeric(6,2)` | No | 0-100 |
-| `deployer_history_score` | `numeric(6,2)` | No | 0-100 |
-| `overall_score` | `numeric(6,2)` | No | Weighted aggregate |
-| `triage_label` | `triage_label` | No | Research workflow state |
-| `confidence` | `confidence_level` | No | Overall scoring confidence |
-| `reason_summary` | `text` | No | Short feed-ready explanation |
-| `reason_details` | `jsonb` | No | Array/object of detailed drivers |
-| `critical_flags` | `jsonb` | No | Array/object of hard downgrade flags |
-| `created_at` | `timestamptz` | No | Row creation time |
+| Column                         |               Type | Nullable | Notes                                 |
+| ------------------------------ | -----------------: | -------: | ------------------------------------- |
+| `id`                           |             `uuid` |       No | Primary key                           |
+| `token_id`                     |             `uuid` |       No | FK to `tokens.id`                     |
+| `canonical_pool_id`            |             `uuid` |      Yes | FK to `pools.id`                      |
+| `market_snapshot_id`           |             `uuid` |      Yes | FK to `market_snapshots.id`           |
+| `risk_check_id`                |             `uuid` |      Yes | FK to `risk_checks.id`                |
+| `deployer_history_snapshot_id` |             `uuid` |      Yes | FK to `deployer_history_snapshots.id` |
+| `scored_at`                    |      `timestamptz` |       No | Score timestamp                       |
+| `contract_risk_score`          |     `numeric(6,2)` |       No | 0-100; higher is safer/better         |
+| `liquidity_quality_score`      |     `numeric(6,2)` |       No | 0-100                                 |
+| `deployer_history_score`       |     `numeric(6,2)` |       No | 0-100                                 |
+| `overall_score`                |     `numeric(6,2)` |       No | Weighted aggregate                    |
+| `triage_label`                 |     `triage_label` |       No | Research workflow state               |
+| `confidence`                   | `confidence_level` |       No | Overall scoring confidence            |
+| `reason_summary`               |             `text` |       No | Short feed-ready explanation          |
+| `reason_details`               |            `jsonb` |       No | Array/object of detailed drivers      |
+| `critical_flags`               |            `jsonb` |       No | Array/object of hard downgrade flags  |
+| `created_at`                   |      `timestamptz` |       No | Row creation time                     |
 
 ## Constraints
 
@@ -649,21 +649,21 @@ obvious_high_risk_launch
 
 ## Columns
 
-| Column | Type | Nullable | Notes |
-|---|---:|---:|---|
-| `id` | `uuid` | No | Primary key |
-| `token_id` | `uuid` | No | FK to `tokens.id` |
-| `token_score_id` | `uuid` | Yes | FK to `token_scores.id` |
-| `alert_type` | `alert_type` | No | v0 alert type |
-| `severity` | `alert_severity` | No | Severity for dashboard flag |
-| `title` | `text` | No | Short title |
-| `message` | `text` | No | Feed/display message |
-| `score_at_alert` | `numeric(6,2)` | Yes | Overall score at alert time |
-| `reason_details` | `jsonb` | No | Evidence for the alert |
-| `dedupe_key` | `text` | No | Unique key for suppressing duplicate alerts |
-| `state_hash` | `text` | Yes | Optional hash of relevant score/risk state |
-| `created_at` | `timestamptz` | No | Alert creation time |
-| `acknowledged_at` | `timestamptz` | Yes | Optional; UI can defer acknowledgement |
+| Column            |             Type | Nullable | Notes                                       |
+| ----------------- | ---------------: | -------: | ------------------------------------------- |
+| `id`              |           `uuid` |       No | Primary key                                 |
+| `token_id`        |           `uuid` |       No | FK to `tokens.id`                           |
+| `token_score_id`  |           `uuid` |      Yes | FK to `token_scores.id`                     |
+| `alert_type`      |     `alert_type` |       No | v0 alert type                               |
+| `severity`        | `alert_severity` |       No | Severity for dashboard flag                 |
+| `title`           |           `text` |       No | Short title                                 |
+| `message`         |           `text` |       No | Feed/display message                        |
+| `score_at_alert`  |   `numeric(6,2)` |      Yes | Overall score at alert time                 |
+| `reason_details`  |          `jsonb` |       No | Evidence for the alert                      |
+| `dedupe_key`      |           `text` |       No | Unique key for suppressing duplicate alerts |
+| `state_hash`      |           `text` |      Yes | Optional hash of relevant score/risk state  |
+| `created_at`      |    `timestamptz` |       No | Alert creation time                         |
+| `acknowledged_at` |    `timestamptz` |      Yes | Optional; UI can defer acknowledgement      |
 
 ## Constraints
 
@@ -713,21 +713,21 @@ This is the audit/debugging backbone of the MVP.
 
 ## Columns
 
-| Column | Type | Nullable | Notes |
-|---|---:|---:|---|
-| `id` | `uuid` | No | Primary key |
-| `source` | `text` | No | `dexscreener`, `geckoterminal`, `goplus`, `basescan`, `rpc` |
-| `entity_type` | `text` | No | `token`, `pool`, `market_snapshot`, `risk_check`, `deployer`, etc. |
-| `entity_key` | `text` | No | Token/pool/deployer key, usually chain + address |
-| `fetched_at` | `timestamptz` | No | Fetch timestamp |
-| `request_url` | `text` | Yes | Full or redacted URL |
-| `request_params_hash` | `text` | Yes | Stable hash of request params |
-| `response_status` | `integer` | Yes | HTTP/RPC status if available |
-| `duration_ms` | `integer` | Yes | Provider request duration |
-| `raw_json` | `jsonb` | Yes | Raw JSON response |
-| `error` | `text` | Yes | Error message if request/parse failed |
-| `error_type` | `text` | Yes | `network`, `rate_limit`, `parse`, `provider`, etc. |
-| `created_at` | `timestamptz` | No | Row creation time |
+| Column                |          Type | Nullable | Notes                                                              |
+| --------------------- | ------------: | -------: | ------------------------------------------------------------------ |
+| `id`                  |        `uuid` |       No | Primary key                                                        |
+| `source`              |        `text` |       No | `dexscreener`, `geckoterminal`, `goplus`, `basescan`, `rpc`        |
+| `entity_type`         |        `text` |       No | `token`, `pool`, `market_snapshot`, `risk_check`, `deployer`, etc. |
+| `entity_key`          |        `text` |       No | Token/pool/deployer key, usually chain + address                   |
+| `fetched_at`          | `timestamptz` |       No | Fetch timestamp                                                    |
+| `request_url`         |        `text` |      Yes | Full or redacted URL                                               |
+| `request_params_hash` |        `text` |      Yes | Stable hash of request params                                      |
+| `response_status`     |     `integer` |      Yes | HTTP/RPC status if available                                       |
+| `duration_ms`         |     `integer` |      Yes | Provider request duration                                          |
+| `raw_json`            |       `jsonb` |      Yes | Raw JSON response                                                  |
+| `error`               |        `text` |      Yes | Error message if request/parse failed                              |
+| `error_type`          |        `text` |      Yes | `network`, `rate_limit`, `parse`, `provider`, etc.                 |
+| `created_at`          | `timestamptz` |       No | Row creation time                                                  |
 
 ## Constraints
 
@@ -779,26 +779,26 @@ Which provider failed?
 
 ## Columns
 
-| Column | Type | Nullable | Notes |
-|---|---:|---:|---|
-| `id` | `uuid` | No | Primary key |
-| `started_at` | `timestamptz` | No | Run start |
-| `completed_at` | `timestamptz` | Yes | Run completion |
-| `status` | `worker_run_status` | No | `running`, `success`, `partial_failure`, `failure` |
-| `candidates_fetched` | `integer` | No | Default `0` |
-| `tokens_inserted` | `integer` | No | Default `0` |
-| `tokens_updated` | `integer` | No | Default `0` |
-| `pools_inserted` | `integer` | No | Default `0` |
-| `pools_updated` | `integer` | No | Default `0` |
-| `market_snapshots_inserted` | `integer` | No | Default `0` |
-| `risk_checks_inserted` | `integer` | No | Default `0` |
-| `deployer_snapshots_inserted` | `integer` | No | Default `0` |
-| `scores_computed` | `integer` | No | Default `0` |
-| `alerts_created` | `integer` | No | Default `0` |
-| `provider_error_count` | `integer` | No | Default `0` |
-| `error_summary` | `text` | Yes | Short human-readable summary |
-| `error_details` | `jsonb` | Yes | Structured provider/pipeline errors |
-| `created_at` | `timestamptz` | No | Row creation time |
+| Column                        |                Type | Nullable | Notes                                              |
+| ----------------------------- | ------------------: | -------: | -------------------------------------------------- |
+| `id`                          |              `uuid` |       No | Primary key                                        |
+| `started_at`                  |       `timestamptz` |       No | Run start                                          |
+| `completed_at`                |       `timestamptz` |      Yes | Run completion                                     |
+| `status`                      | `worker_run_status` |       No | `running`, `success`, `partial_failure`, `failure` |
+| `candidates_fetched`          |           `integer` |       No | Default `0`                                        |
+| `tokens_inserted`             |           `integer` |       No | Default `0`                                        |
+| `tokens_updated`              |           `integer` |       No | Default `0`                                        |
+| `pools_inserted`              |           `integer` |       No | Default `0`                                        |
+| `pools_updated`               |           `integer` |       No | Default `0`                                        |
+| `market_snapshots_inserted`   |           `integer` |       No | Default `0`                                        |
+| `risk_checks_inserted`        |           `integer` |       No | Default `0`                                        |
+| `deployer_snapshots_inserted` |           `integer` |       No | Default `0`                                        |
+| `scores_computed`             |           `integer` |       No | Default `0`                                        |
+| `alerts_created`              |           `integer` |       No | Default `0`                                        |
+| `provider_error_count`        |           `integer` |       No | Default `0`                                        |
+| `error_summary`               |              `text` |      Yes | Short human-readable summary                       |
+| `error_details`               |             `jsonb` |      Yes | Structured provider/pipeline errors                |
+| `created_at`                  |       `timestamptz` |       No | Row creation time                                  |
 
 ## Constraints
 
@@ -1018,22 +1018,30 @@ packages/db/schema.ts
 
 ```ts
 const timestamps = {
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow()
 };
 ```
 
 ## Enum declarations
 
 ```ts
-export const confidenceLevel = pgEnum('confidence_level', ['low', 'medium', 'high']);
+export const confidenceLevel = pgEnum('confidence_level', [
+  'low',
+  'medium',
+  'high'
+]);
 
 export const riskLevel = pgEnum('risk_level', [
   'unknown',
   'low',
   'medium',
   'high',
-  'critical',
+  'critical'
 ]);
 
 export const triageLabel = pgEnum('triage_label', [
@@ -1041,7 +1049,7 @@ export const triageLabel = pgEnum('triage_label', [
   'Risky',
   'Watch',
   'Research Deeper',
-  'High Priority',
+  'High Priority'
 ]);
 ```
 
@@ -1093,13 +1101,13 @@ The local MVP should prioritize debugging and traceability over storage efficien
 
 Potential retention policy:
 
-| Table | Retention idea |
-|---|---|
-| `source_observations` | Keep 30-90 days locally, archive if useful |
-| `market_snapshots` | Keep high-frequency recent data; downsample older data |
-| `risk_checks` | Keep all or latest plus changes |
-| `token_scores` | Keep all during validation; later downsample unchanged scores |
-| `worker_runs` | Keep 30-90 days |
+| Table                 | Retention idea                                                |
+| --------------------- | ------------------------------------------------------------- |
+| `source_observations` | Keep 30-90 days locally, archive if useful                    |
+| `market_snapshots`    | Keep high-frequency recent data; downsample older data        |
+| `risk_checks`         | Keep all or latest plus changes                               |
+| `token_scores`        | Keep all during validation; later downsample unchanged scores |
+| `worker_runs`         | Keep 30-90 days                                               |
 
 Do not implement retention until local storage becomes a real problem.
 
@@ -1139,4 +1147,3 @@ The schema is acceptable for Stage 5 implementation when:
 - alerts can be deduped deterministically
 - raw provider payloads are stored and linked to normalized records
 - the ranked feed query can return the required table columns
-

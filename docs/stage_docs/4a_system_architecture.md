@@ -23,24 +23,24 @@ The goal is not to build a generic crypto data platform. The goal is to build th
 
 ## Architectural Decision Summary
 
-| Area | Decision |
-|---|---|
-| App shape | Next.js frontend + separate Node/TypeScript worker/API service |
-| Job runner | Long-running Node worker loop |
-| Polling interval | 3 minutes |
-| Primary discovery source | DEX Screener first |
-| Secondary discovery path | Optional Base RPC known-factory polling later |
-| Market enrichment | DEX Screener primary; GeckoTerminal optional cross-check |
-| Contract-risk enrichment | GoPlus primary |
+| Area                         | Decision                                                               |
+| ---------------------------- | ---------------------------------------------------------------------- |
+| App shape                    | Next.js frontend + separate Node/TypeScript worker/API service         |
+| Job runner                   | Long-running Node worker loop                                          |
+| Polling interval             | 3 minutes                                                              |
+| Primary discovery source     | DEX Screener first                                                     |
+| Secondary discovery path     | Optional Base RPC known-factory polling later                          |
+| Market enrichment            | DEX Screener primary; GeckoTerminal optional cross-check               |
+| Contract-risk enrichment     | GoPlus primary                                                         |
 | Explorer/deployer enrichment | Basescan if available; fallback to GoPlus creator field or RPC receipt |
-| Database | Postgres through Docker Compose |
-| Query/schema layer | Drizzle |
-| Alert delivery | Console logs + dashboard alert flags |
-| UI | Rough internal ranked table |
-| Social integration | Deferred |
-| Rust | Deferred |
-| Self-hosted Base node | Deferred |
-| Paid infrastructure | Deferred unless free path blocks MVP |
+| Database                     | Postgres through Docker Compose                                        |
+| Query/schema layer           | Drizzle                                                                |
+| Alert delivery               | Console logs + dashboard alert flags                                   |
+| UI                           | Rough internal ranked table                                            |
+| Social integration           | Deferred                                                               |
+| Rust                         | Deferred                                                               |
+| Self-hosted Base node        | Deferred                                                               |
+| Paid infrastructure          | Deferred unless free path blocks MVP                                   |
 
 ---
 
@@ -226,11 +226,11 @@ Every 3 minutes:
 
 ### Why Worker Loop Instead of Cron or Queue
 
-| Option | Decision | Reason |
-|---|---|---|
-| Cron script | Not selected | Simple, but weaker for stateful polling, retries, and local observability |
-| Node worker loop | Selected | Simple enough for v0 and keeps ingestion decoupled from UI rendering |
-| Postgres-backed job queue | Deferred | Useful later, but unnecessary until provider failures or volume justify it |
+| Option                    | Decision     | Reason                                                                     |
+| ------------------------- | ------------ | -------------------------------------------------------------------------- |
+| Cron script               | Not selected | Simple, but weaker for stateful polling, retries, and local observability  |
+| Node worker loop          | Selected     | Simple enough for v0 and keeps ingestion decoupled from UI rendering       |
+| Postgres-backed job queue | Deferred     | Useful later, but unnecessary until provider failures or volume justify it |
 
 ### Worker Guardrails
 
@@ -312,8 +312,8 @@ Returns local system health:
 
 ```ts
 type HealthResponse = {
-  status: "ok" | "degraded";
-  database: "ok" | "error";
+  status: 'ok' | 'degraded';
+  database: 'ok' | 'error';
   lastWorkerRunAt: string | null;
   lastSuccessfulDiscoveryAt: string | null;
   lastError: string | null;
@@ -365,16 +365,16 @@ Use two types of tables:
 
 ### Identity Rules
 
-| Entity | Primary identity |
-|---|---|
-| Token | `chain_id + token_address` |
-| Pool | `chain_id + pool_address` |
-| Deployer | `chain_id + deployer_address` |
-| Market snapshot | generated ID or `token + pool + source + observed_at` |
-| Risk check | generated ID or `token + source + observed_at` |
-| Score | generated ID or `token + scored_at` |
-| Alert | generated ID, with dedupe key for alert type + token + state |
-| Source observation | generated ID |
+| Entity             | Primary identity                                             |
+| ------------------ | ------------------------------------------------------------ |
+| Token              | `chain_id + token_address`                                   |
+| Pool               | `chain_id + pool_address`                                    |
+| Deployer           | `chain_id + deployer_address`                                |
+| Market snapshot    | generated ID or `token + pool + source + observed_at`        |
+| Risk check         | generated ID or `token + source + observed_at`               |
+| Score              | generated ID or `token + scored_at`                          |
+| Alert              | generated ID, with dedupe key for alert type + token + state |
+| Source observation | generated ID                                                 |
 
 Full schema details belong in `4b_database_schema.md`.
 
@@ -819,26 +819,26 @@ Every 3 minutes
 
 ### Suggested Source Cadence
 
-| Data Type | Cadence | Notes |
-|---|---:|---|
-| DEX Screener candidate discovery | every 3 minutes | Main loop |
-| DEX Screener market refresh | every 3 minutes for recent tokens | Reduce for old/ignored tokens later |
-| GoPlus risk check | first seen, then occasional recheck | Do not spam scanner |
-| Basescan verification/deployer | first seen, then occasional recheck | If API available |
-| GeckoTerminal cross-check | on demand or 5–15 minutes | Optional |
-| Base RPC metadata/receipt | on demand | Optional fallback |
-| Score recomputation | every run after new snapshots | Cheap and deterministic |
-| Alert evaluation | every run after scoring | Dedupe required |
+| Data Type                        |                             Cadence | Notes                               |
+| -------------------------------- | ----------------------------------: | ----------------------------------- |
+| DEX Screener candidate discovery |                     every 3 minutes | Main loop                           |
+| DEX Screener market refresh      |   every 3 minutes for recent tokens | Reduce for old/ignored tokens later |
+| GoPlus risk check                | first seen, then occasional recheck | Do not spam scanner                 |
+| Basescan verification/deployer   | first seen, then occasional recheck | If API available                    |
+| GeckoTerminal cross-check        |           on demand or 5–15 minutes | Optional                            |
+| Base RPC metadata/receipt        |                           on demand | Optional fallback                   |
+| Score recomputation              |       every run after new snapshots | Cheap and deterministic             |
+| Alert evaluation                 |             every run after scoring | Dedupe required                     |
 
 ### Token Aging Policy
 
 To control cost and noise, tokens should be assigned a freshness tier.
 
-| Tier | Definition | Refresh behavior |
-|---|---|---|
-| Hot | first seen in last 60 minutes | refresh every worker run |
-| Warm | first seen in last 24 hours | refresh every 2–5 runs |
-| Cold | older than 24 hours or ignored | refresh rarely or stop |
+| Tier | Definition                     | Refresh behavior         |
+| ---- | ------------------------------ | ------------------------ |
+| Hot  | first seen in last 60 minutes  | refresh every worker run |
+| Warm | first seen in last 24 hours    | refresh every 2–5 runs   |
+| Cold | older than 24 hours or ignored | refresh rarely or stop   |
 
 This can be implemented later in v0 after the basic loop works.
 
@@ -860,15 +860,15 @@ The system should not fail the entire pipeline because GeckoTerminal, Basescan, 
 
 ## Missing Data Policy
 
-| Missing Data | Behavior |
-|---|---|
-| Missing token name/symbol | show address and mark metadata confidence low |
-| Missing pair creation time | use first-seen timestamp |
-| Missing liquidity | mark liquidity quality unknown/low confidence |
-| Missing GoPlus risk data | do not mark safe; lower contract-risk confidence |
-| Missing deployer | classify deployer as unknown; lower deployer confidence |
+| Missing Data                      | Behavior                                                                         |
+| --------------------------------- | -------------------------------------------------------------------------------- |
+| Missing token name/symbol         | show address and mark metadata confidence low                                    |
+| Missing pair creation time        | use first-seen timestamp                                                         |
+| Missing liquidity                 | mark liquidity quality unknown/low confidence                                    |
+| Missing GoPlus risk data          | do not mark safe; lower contract-risk confidence                                 |
+| Missing deployer                  | classify deployer as unknown; lower deployer confidence                          |
 | Missing GeckoTerminal cross-check | continue with DEX Screener only; lower canonical confidence if pool is ambiguous |
-| Missing Basescan verification | use GoPlus/RPC if possible; otherwise mark unknown |
+| Missing Basescan verification     | use GoPlus/RPC if possible; otherwise mark unknown                               |
 
 ## Duplicate Handling
 
@@ -911,7 +911,7 @@ type WorkerRun = {
   id: string;
   startedAt: string;
   completedAt: string | null;
-  status: "running" | "success" | "partial_failure" | "failure";
+  status: 'running' | 'success' | 'partial_failure' | 'failure';
   candidatesFetched: number;
   tokensInserted: number;
   poolsInserted: number;
@@ -1013,15 +1013,15 @@ base-launch-intelligence/
 
 ### Package Responsibilities
 
-| Package/App | Responsibility |
-|---|---|
-| `apps/web` | Next.js UI and local API routes |
-| `apps/worker` | polling loop and pipeline execution |
-| `packages/db` | Drizzle schema, client, migrations |
-| `packages/scoring` | deterministic scoring and reason generation |
-| `packages/types` | shared TypeScript types |
-| `packages/config` | environment/config constants |
-| `samples` | captured raw provider payloads for test fixtures |
+| Package/App        | Responsibility                                   |
+| ------------------ | ------------------------------------------------ |
+| `apps/web`         | Next.js UI and local API routes                  |
+| `apps/worker`      | polling loop and pipeline execution              |
+| `packages/db`      | Drizzle schema, client, migrations               |
+| `packages/scoring` | deterministic scoring and reason generation      |
+| `packages/types`   | shared TypeScript types                          |
+| `packages/config`  | environment/config constants                     |
+| `samples`          | captured raw provider payloads for test fixtures |
 
 ---
 
@@ -1105,39 +1105,39 @@ This architecture intentionally avoids wallet connectivity and execution paths.
 
 Do not design or implement these in v0:
 
-| Deferred Area | Reason |
-|---|---|
-| Rust worker | No measured CPU bottleneck |
-| Farcaster/Neynar | Deferred until core ranking loop works |
-| X/Twitter ingestion | Too noisy and outside v0 scope |
-| Telegram ingestion | Weak as broad input; possible future alert output only |
-| Self-hosted Base node | Infra-heavy before validation |
-| Flashblocks dependency | Not required for 1–5 minute freshness |
-| Kafka | Overkill for local MVP |
-| ClickHouse | Overkill until query volume or time-series volume justifies it |
-| Graph database | Premature before wallet/deployer graph scope exists |
-| Vector database | No v0 semantic retrieval requirement |
-| ML ranking | Premature and harder to debug than rules |
-| Route simulation | Deferred until liquidity heuristics prove useful |
-| Full token detail pages | v0 is table-only |
-| External alert delivery | Console logs + dashboard flags are enough |
+| Deferred Area           | Reason                                                         |
+| ----------------------- | -------------------------------------------------------------- |
+| Rust worker             | No measured CPU bottleneck                                     |
+| Farcaster/Neynar        | Deferred until core ranking loop works                         |
+| X/Twitter ingestion     | Too noisy and outside v0 scope                                 |
+| Telegram ingestion      | Weak as broad input; possible future alert output only         |
+| Self-hosted Base node   | Infra-heavy before validation                                  |
+| Flashblocks dependency  | Not required for 1–5 minute freshness                          |
+| Kafka                   | Overkill for local MVP                                         |
+| ClickHouse              | Overkill until query volume or time-series volume justifies it |
+| Graph database          | Premature before wallet/deployer graph scope exists            |
+| Vector database         | No v0 semantic retrieval requirement                           |
+| ML ranking              | Premature and harder to debug than rules                       |
+| Route simulation        | Deferred until liquidity heuristics prove useful               |
+| Full token detail pages | v0 is table-only                                               |
+| External alert delivery | Console logs + dashboard flags are enough                      |
 
 ---
 
 ## Key Failure Modes and Architectural Defenses
 
-| Failure Mode | Architectural Defense |
-|---|---|
-| DEX Screener misses very early launches | Accept for v0; add bounded Base RPC factory polling later if needed |
-| Wrong canonical pool | Store all pools; compute canonical confidence; expose uncertainty |
-| Raw volume dominates score | Liquidity score should use volume as context, not sole rank signal |
-| Risk scanner false confidence | Store scanner output as evidence; missing fields lower confidence |
-| Deployer attribution unavailable | Fallback to GoPlus/RPC/manual links; classify as unknown, not automatically bad |
-| Provider rate limits | Cache, tier refresh cadence, avoid polling all sources equally |
-| Alert spam | Only two alert types; threshold + dedupe rules |
-| Opaque score | Store component scores and reason strings |
-| UI becomes product sink | Keep table-only MVP; no detail pages or polish requirements |
-| Scope drifts into trading | No wallet, no execution, no recommendations |
+| Failure Mode                            | Architectural Defense                                                           |
+| --------------------------------------- | ------------------------------------------------------------------------------- |
+| DEX Screener misses very early launches | Accept for v0; add bounded Base RPC factory polling later if needed             |
+| Wrong canonical pool                    | Store all pools; compute canonical confidence; expose uncertainty               |
+| Raw volume dominates score              | Liquidity score should use volume as context, not sole rank signal              |
+| Risk scanner false confidence           | Store scanner output as evidence; missing fields lower confidence               |
+| Deployer attribution unavailable        | Fallback to GoPlus/RPC/manual links; classify as unknown, not automatically bad |
+| Provider rate limits                    | Cache, tier refresh cadence, avoid polling all sources equally                  |
+| Alert spam                              | Only two alert types; threshold + dedupe rules                                  |
+| Opaque score                            | Store component scores and reason strings                                       |
+| UI becomes product sink                 | Keep table-only MVP; no detail pages or polish requirements                     |
+| Scope drifts into trading               | No wallet, no execution, no recommendations                                     |
 
 ---
 
@@ -1145,13 +1145,13 @@ Do not design or implement these in v0:
 
 This architecture depends on the following Stage 4 documents:
 
-| Document | Dependency |
-|---|---|
-| `4b_database_schema.md` | Defines exact Drizzle/Postgres schema and indexes |
-| `4c_ingestion_and_enrichment_pipeline.md` | Defines precise worker step logic and provider call order |
-| `4d_scoring_and_triage_model.md` | Defines scoring rules, labels, thresholds, and reason strings |
-| `4e_api_and_frontend_contracts.md` | Defines API response shapes and frontend table contracts |
-| `4f_mvp_build_plan.md` | Converts architecture into implementation sequence |
+| Document                                  | Dependency                                                    |
+| ----------------------------------------- | ------------------------------------------------------------- |
+| `4b_database_schema.md`                   | Defines exact Drizzle/Postgres schema and indexes             |
+| `4c_ingestion_and_enrichment_pipeline.md` | Defines precise worker step logic and provider call order     |
+| `4d_scoring_and_triage_model.md`          | Defines scoring rules, labels, thresholds, and reason strings |
+| `4e_api_and_frontend_contracts.md`        | Defines API response shapes and frontend table contracts      |
+| `4f_mvp_build_plan.md`                    | Converts architecture into implementation sequence            |
 
 ---
 

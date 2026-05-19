@@ -38,23 +38,23 @@ Which should be watched?
 
 ## Build Constraints
 
-| Area | Constraint |
-|---|---|
-| Timebox | Approximately two weeks |
-| User | Single analyst/operator |
-| Deployment | Local-first |
-| Stack | Next.js, Node/TypeScript, Postgres, Drizzle |
-| Worker | Long-running Node worker loop |
-| Database | Docker Compose Postgres |
-| Polling | 3-minute loop |
-| Discovery | DEX Screener first |
-| Market data | DEX Screener primary |
-| Risk data | GoPlus primary |
-| Deployer data | Basescan if available; fallback to GoPlus/RPC/unknown |
-| Social data | Deferred |
-| Trading/execution | Not built |
-| Rust | Deferred |
-| Auth/billing | Not built |
+| Area              | Constraint                                            |
+| ----------------- | ----------------------------------------------------- |
+| Timebox           | Approximately two weeks                               |
+| User              | Single analyst/operator                               |
+| Deployment        | Local-first                                           |
+| Stack             | Next.js, Node/TypeScript, Postgres, Drizzle           |
+| Worker            | Long-running Node worker loop                         |
+| Database          | Docker Compose Postgres                               |
+| Polling           | 3-minute loop                                         |
+| Discovery         | DEX Screener first                                    |
+| Market data       | DEX Screener primary                                  |
+| Risk data         | GoPlus primary                                        |
+| Deployer data     | Basescan if available; fallback to GoPlus/RPC/unknown |
+| Social data       | Deferred                                              |
+| Trading/execution | Not built                                             |
+| Rust              | Deferred                                              |
+| Auth/billing      | Not built                                             |
 
 ---
 
@@ -690,27 +690,27 @@ Compare the console against the manual baseline.
 
 ## Week 1 — Data foundation and scoring
 
-| Day | Focus | Output |
-|---:|---|---|
-| 1 | Bootstrap repo, Docker, Drizzle | Local app skeleton and DB connection |
-| 2 | Schema and migrations | Tables, enums, indexes |
-| 3 | DEX Screener client and samples | Candidate + market sample payloads |
-| 4 | Raw observations and normalization | Tokens, pools, market snapshots |
-| 5 | Worker loop and worker_runs | Repeatable 3-minute ingestion |
-| 6 | GoPlus risk enrichment | Risk checks and raw payloads |
-| 7 | Deployer enrichment + canonical pool | Shallow deployer history and pool confidence |
+| Day | Focus                                | Output                                       |
+| --: | ------------------------------------ | -------------------------------------------- |
+|   1 | Bootstrap repo, Docker, Drizzle      | Local app skeleton and DB connection         |
+|   2 | Schema and migrations                | Tables, enums, indexes                       |
+|   3 | DEX Screener client and samples      | Candidate + market sample payloads           |
+|   4 | Raw observations and normalization   | Tokens, pools, market snapshots              |
+|   5 | Worker loop and worker_runs          | Repeatable 3-minute ingestion                |
+|   6 | GoPlus risk enrichment               | Risk checks and raw payloads                 |
+|   7 | Deployer enrichment + canonical pool | Shallow deployer history and pool confidence |
 
 ## Week 2 — Product loop and validation
 
-| Day | Focus | Output |
-|---:|---|---|
-| 8 | Scoring engine | Scores, labels, reason strings |
-| 9 | Alerts | High-score and high-risk alert rows |
-| 10 | API endpoints | Launches, alerts, health |
-| 11 | Ranked table UI | Rough usable dashboard |
-| 12 | End-to-end hardening | Error states, staleness, logs |
-| 13 | Validation against DEX Screener | Notes and threshold fixes |
-| 14 | Cleanup and MVP review | README, known issues, next-stage decision |
+| Day | Focus                           | Output                                    |
+| --: | ------------------------------- | ----------------------------------------- |
+|   8 | Scoring engine                  | Scores, labels, reason strings            |
+|   9 | Alerts                          | High-score and high-risk alert rows       |
+|  10 | API endpoints                   | Launches, alerts, health                  |
+|  11 | Ranked table UI                 | Rough usable dashboard                    |
+|  12 | End-to-end hardening            | Error states, staleness, logs             |
+|  13 | Validation against DEX Screener | Notes and threshold fixes                 |
+|  14 | Cleanup and MVP review          | README, known issues, next-stage decision |
 
 This schedule assumes focused work. If time is constrained, cut polish and optional integrations first.
 
@@ -720,46 +720,46 @@ This schedule assumes focused work. If time is constrained, cut polish and optio
 
 ## Backend / Worker
 
-| Task | Priority | Notes |
-|---|---:|---|
-| Postgres + Drizzle schema | P0 | Required |
-| Source observation storage | P0 | Required for debugging |
-| DEX Screener discovery | P0 | Required |
-| DEX Screener market enrichment | P0 | Required |
-| GoPlus risk enrichment | P0 | Required if accessible |
-| Deployer resolution from GoPlus | P0 | Good enough fallback |
-| Basescan deployer enrichment | P1 | Use if key available |
-| GeckoTerminal cross-check | P1 | Optional for ambiguous/high-interest tokens |
-| Base RPC fallback | P2 | Only if needed |
-| Canonical pool selection | P0 | Required |
-| Scoring engine | P0 | Required |
-| Alert evaluator | P0 | Required |
-| Worker health logging | P0 | Required |
+| Task                            | Priority | Notes                                       |
+| ------------------------------- | -------: | ------------------------------------------- |
+| Postgres + Drizzle schema       |       P0 | Required                                    |
+| Source observation storage      |       P0 | Required for debugging                      |
+| DEX Screener discovery          |       P0 | Required                                    |
+| DEX Screener market enrichment  |       P0 | Required                                    |
+| GoPlus risk enrichment          |       P0 | Required if accessible                      |
+| Deployer resolution from GoPlus |       P0 | Good enough fallback                        |
+| Basescan deployer enrichment    |       P1 | Use if key available                        |
+| GeckoTerminal cross-check       |       P1 | Optional for ambiguous/high-interest tokens |
+| Base RPC fallback               |       P2 | Only if needed                              |
+| Canonical pool selection        |       P0 | Required                                    |
+| Scoring engine                  |       P0 | Required                                    |
+| Alert evaluator                 |       P0 | Required                                    |
+| Worker health logging           |       P0 | Required                                    |
 
 ## API
 
-| Task | Priority | Notes |
-|---|---:|---|
-| `GET /api/launches` | P0 | Required |
-| `GET /api/alerts` | P0 | Required |
-| `GET /api/health` | P0 | Required |
-| Filter by label | P2 | Optional |
-| Acknowledge alerts | P2 | Deferred |
-| Token detail endpoint | P3 | Deferred |
+| Task                  | Priority | Notes    |
+| --------------------- | -------: | -------- |
+| `GET /api/launches`   |       P0 | Required |
+| `GET /api/alerts`     |       P0 | Required |
+| `GET /api/health`     |       P0 | Required |
+| Filter by label       |       P2 | Optional |
+| Acknowledge alerts    |       P2 | Deferred |
+| Token detail endpoint |       P3 | Deferred |
 
 ## Frontend
 
-| Task | Priority | Notes |
-|---|---:|---|
-| Ranked table | P0 | Required |
-| Reason string display | P0 | Required |
-| Component summaries | P0 | Required |
-| Confidence/staleness display | P0 | Required |
-| External links | P1 | Useful |
-| Alert flags | P1 | Useful |
-| Sorting/filtering UI | P2 | Optional |
-| Detail page | P3 | Deferred |
-| Charts | P3 | Deferred |
+| Task                         | Priority | Notes    |
+| ---------------------------- | -------: | -------- |
+| Ranked table                 |       P0 | Required |
+| Reason string display        |       P0 | Required |
+| Component summaries          |       P0 | Required |
+| Confidence/staleness display |       P0 | Required |
+| External links               |       P1 | Useful   |
+| Alert flags                  |       P1 | Useful   |
+| Sorting/filtering UI         |       P2 | Optional |
+| Detail page                  |       P3 | Deferred |
+| Charts                       |       P3 | Deferred |
 
 ---
 
@@ -796,17 +796,17 @@ Postgres persistence
 
 # Risk Register
 
-| Risk | Impact | Mitigation |
-|---|---|---|
-| DEX Screener candidate source is delayed or incomplete | Feed misses launches | Accept for v0 or add bounded RPC factory polling later |
-| GoPlus fields are missing or unreliable | False confidence | Treat missing risk as low confidence; block High Priority |
-| Basescan API unavailable | Weak deployer history | Use GoPlus creator field + internal history |
-| Canonical pool selection wrong | Bad liquidity scores | Start conservative; expose confidence and reason |
-| Raw volume dominates ranking | Recreates DEX Screener | Keep volume as secondary liquidity sanity signal |
-| Alerts are noisy | User ignores them | Only high-score and severe-risk alerts |
-| UI takes too much time | MVP slips | Use plain table, no detail page |
-| Scope drifts into social/execution | Product loses focus | Enforce non-goals and cut rules |
-| Provider rate limits break polling | Worker failures | Cap candidate count, cache, mark partial failures |
+| Risk                                                   | Impact                 | Mitigation                                                |
+| ------------------------------------------------------ | ---------------------- | --------------------------------------------------------- |
+| DEX Screener candidate source is delayed or incomplete | Feed misses launches   | Accept for v0 or add bounded RPC factory polling later    |
+| GoPlus fields are missing or unreliable                | False confidence       | Treat missing risk as low confidence; block High Priority |
+| Basescan API unavailable                               | Weak deployer history  | Use GoPlus creator field + internal history               |
+| Canonical pool selection wrong                         | Bad liquidity scores   | Start conservative; expose confidence and reason          |
+| Raw volume dominates ranking                           | Recreates DEX Screener | Keep volume as secondary liquidity sanity signal          |
+| Alerts are noisy                                       | User ignores them      | Only high-score and severe-risk alerts                    |
+| UI takes too much time                                 | MVP slips              | Use plain table, no detail page                           |
+| Scope drifts into social/execution                     | Product loses focus    | Enforce non-goals and cut rules                           |
+| Provider rate limits break polling                     | Worker failures        | Cap candidate count, cache, mark partial failures         |
 
 ---
 
@@ -908,7 +908,7 @@ Yes/No:
 ## Top-ranked rows
 
 | Token | Label | Score | Did label make sense? | Notes |
-|---|---|---:|---|---|
+| ----- | ----- | ----: | --------------------- | ----- |
 
 ## False positives
 

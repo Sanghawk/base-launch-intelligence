@@ -96,13 +96,13 @@ Required columns:
 
 The product should use these labels:
 
-| Label | Meaning |
-|---|---|
-| Ignore | Low-quality or insufficiently interesting launch; no action needed. |
-| Risky | Obvious or material structural risk; avoid or inspect only for research purposes. |
-| Watch | Not enough confidence for deeper research, but worth monitoring. |
-| Research Deeper | Sufficiently interesting and not obviously disqualified. |
-| High Priority | Strongest candidates for immediate manual review. |
+| Label           | Meaning                                                                           |
+| --------------- | --------------------------------------------------------------------------------- |
+| Ignore          | Low-quality or insufficiently interesting launch; no action needed.               |
+| Risky           | Obvious or material structural risk; avoid or inspect only for research purposes. |
+| Watch           | Not enough confidence for deeper research, but worth monitoring.                  |
+| Research Deeper | Sufficiently interesting and not obviously disqualified.                          |
+| High Priority   | Strongest candidates for immediate manual review.                                 |
 
 Labels are not trade recommendations. They are research workflow states.
 
@@ -163,10 +163,10 @@ The first version can be conservative and label unknown deployers as `unknown`, 
 
 The MVP should support only two alert types:
 
-| Alert | Meaning |
-|---|---|
-| New high-score launch | A launch crosses the high-priority threshold. |
-| Obvious high-risk launch | A launch is detected with severe risk flags. |
+| Alert                    | Meaning                                       |
+| ------------------------ | --------------------------------------------- |
+| New high-score launch    | A launch crosses the high-priority threshold. |
+| Obvious high-risk launch | A launch is detected with severe risk flags.  |
 
 Deferred alert types:
 
@@ -235,14 +235,14 @@ The MVP will not:
 
 ## Risks
 
-| Risk | Impact | Mitigation |
-|---|---|---|
-| Ranked feed is not better than DEX Screener | Project may lack product edge | Compare against DEX Screener new Base pairs by volume. |
-| Contract-risk data is incomplete | False confidence | Show confidence and raw reason strings. |
-| Liquidity data is misleading | Bad ranking | Include canonical-pool confidence and conservative liquidity labels. |
-| Deployer history is hard to infer | Weak differentiator | Start with shallow deployer history and mark unknowns clearly. |
-| Alerts are noisy | User ignores product | Keep alerts limited to high-score and high-risk only. |
-| MVP scope expands | Two-week target breaks | Keep social, detail pages, wallet graphs, and polish deferred. |
+| Risk                                        | Impact                        | Mitigation                                                           |
+| ------------------------------------------- | ----------------------------- | -------------------------------------------------------------------- |
+| Ranked feed is not better than DEX Screener | Project may lack product edge | Compare against DEX Screener new Base pairs by volume.               |
+| Contract-risk data is incomplete            | False confidence              | Show confidence and raw reason strings.                              |
+| Liquidity data is misleading                | Bad ranking                   | Include canonical-pool confidence and conservative liquidity labels. |
+| Deployer history is hard to infer           | Weak differentiator           | Start with shallow deployer history and mark unknowns clearly.       |
+| Alerts are noisy                            | User ignores product          | Keep alerts limited to high-score and high-risk only.                |
+| MVP scope expands                           | Two-week target breaks        | Keep social, detail pages, wallet graphs, and polish deferred.       |
 
 ## Acceptance Standard
 
@@ -255,4 +255,3 @@ The MVP does not need to be visually polished or externally usable.
 Stage 2 is complete when the MVP can be described as:
 
 > A rough internal ranked feed of new Base launches that scores each token using contract risk, liquidity quality, and deployer history, with basic alerts for high-score and high-risk launches.
-
