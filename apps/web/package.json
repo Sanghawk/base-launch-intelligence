@@ -1,0 +1,10 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "echo \"web app not scaffolded yet\"",
+    "typecheck": "echo \"web typecheck not configured yet\""
+  }
+}
