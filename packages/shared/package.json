@@ -4,6 +4,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "typecheck": "echo \"shared typecheck not configured yet\""
+    "typecheck": "tsc --noEmit -p tsconfig.json" 
   }
 }

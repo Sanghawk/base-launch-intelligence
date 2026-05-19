@@ -5,6 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "echo \"web app not scaffolded yet\"",
-    "typecheck": "echo \"web typecheck not configured yet\""
+    "typecheck": "tsc --noEmit -p tsconfig.json" 
   }
 }
