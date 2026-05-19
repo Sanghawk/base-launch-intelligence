@@ -1,0 +1,392 @@
+milestone:
+  title: "M1 - Database Schema and Drizzle"
+  description: "Implement the Stage 4 Postgres schema, Drizzle migrations, database client, and basic health query for the Base Launch Intelligence Console MVP."
+
+labels:
+  - name: "milestone:m1"
+    color: "5319e7"
+    description: "Milestone 1: Database Schema and Drizzle"
+
+  - name: "type:task"
+    color: "0e8a16"
+    description: "Implementation task"
+
+  - name: "type:smoke-test"
+    color: "fbca04"
+    description: "Local validation or smoke test task"
+
+  - name: "area:db"
+    color: "0052cc"
+    description: "Database schema, client, migrations, and queries"
+
+  - name: "area:drizzle"
+    color: "1d76db"
+    description: "Drizzle ORM and migration work"
+
+  - name: "area:health"
+    color: "bfdadc"
+    description: "Health check and local system status"
+
+  - name: "priority:p0"
+    color: "b60205"
+    description: "Required for milestone completion"
+
+  - name: "priority:p1"
+    color: "d93f0b"
+    description: "Important but not the first blocker"
+
+issues:
+  - order: 1
+    title: "M1: Add Drizzle dependencies and database config"
+    labels:
+      - "milestone:m1"
+      - "type:task"
+      - "area:db"
+      - "area:drizzle"
+      - "priority:p0"
+    body: |
+      ## Summary
+
+      Add the Drizzle/Postgres dependencies and configuration needed for the MVP database layer.
+
+      ## Context
+
+      Milestone 1 implements the Stage 4 schema and migrations. Before defining tables, the repo needs a working Drizzle setup connected to the local Docker Compose Postgres instance.
+
+      ## Tasks
+
+      - Add required Drizzle and Postgres dependencies to the workspace.
+      - Confirm `packages/db` is the home for the database schema and client.
+      - Add or update `drizzle.config.ts`.
+      - Configure Drizzle to read `DATABASE_URL` from the environment.
+      - Ensure migration output is written under the db package.
+      - Add root package scripts for generating and running migrations if missing.
+
+      ## Acceptance Criteria
+
+      - Drizzle can load the project config without errors.
+      - Drizzle uses the local `DATABASE_URL`.
+      - Migration scripts exist in the root `package.json`.
+      - The database package remains usable from both web and worker packages.
+      - No provider API secrets are exposed to frontend code.
+
+  - order: 2
+    title: "M1: Define shared database enums"
+    labels:
+      - "milestone:m1"
+      - "type:task"
+      - "area:db"
+      - "area:drizzle"
+      - "priority:p0"
+    body: |
+      ## Summary
+
+      Define the shared Drizzle enum types required by the MVP schema.
+
+      ## Tasks
+
+      Add Drizzle enum definitions for:
+
+      - `confidence_level`
+      - `risk_level`
+      - `triage_label`
+      - `alert_type`
+      - `alert_severity`
+      - `worker_run_status`
+
+      ## Acceptance Criteria
+
+      - All required enum types are defined in the Drizzle schema.
+      - Enum values match the Stage 4 database schema.
+      - `triage_label` includes:
+        - `Ignore`
+        - `Risky`
+        - `Watch`
+        - `Research Deeper`
+        - `High Priority`
+      - `alert_type` includes:
+        - `new_high_score_launch`
+        - `obvious_high_risk_launch`
+      - `worker_run_status` includes:
+        - `running`
+        - `success`
+        - `partial_failure`
+        - `failure`
+      - TypeScript inference works for enum-backed fields.
+
+  - order: 3
+    title: "M1: Define canonical identity tables"
+    labels:
+      - "milestone:m1"
+      - "type:task"
+      - "area:db"
+      - "area:drizzle"
+      - "priority:p0"
+    body: |
+      ## Summary
+
+      Define the canonical identity tables for tokens, pools, and deployers.
+
+      ## Context
+
+      Canonical tables store stable identity. Snapshot tables will store time-varying observations separately.
+
+      ## Tasks
+
+      Define Drizzle schema for:
+
+      - `tokens`
+      - `pools`
+      - `deployers`
+
+      Include fields needed for:
+
+      - Base chain ID
+      - lowercased EVM addresses
+      - token identity display fields
+      - deployer linkage
+      - pool/quote-asset context
+      - canonical pool flags
+      - confidence fields
+      - created/updated timestamps
+
+      ## Acceptance Criteria
+
+      - `tokens` table exists in Drizzle.
+      - `pools` table exists in Drizzle.
+      - `deployers` table exists in Drizzle.
+      - `tokens` has a unique constraint on `chain_id + address`.
+      - `pools` has a unique constraint on `chain_id + address`.
+      - `deployers` has a unique constraint on `chain_id + address`.
+      - Token name and symbol are stored as display fields only.
+      - Address fields are represented as text and expected to be lowercased by application code.
+      - Foreign-key relationships are defined where appropriate.
+
+  - order: 4
+    title: "M1: Define source observation and snapshot tables"
+    labels:
+      - "milestone:m1"
+      - "type:task"
+      - "area:db"
+      - "area:drizzle"
+      - "priority:p0"
+    body: |
+      ## Summary
+
+      Define the append-oriented observation and snapshot tables used by ingestion, enrichment, scoring, and debugging.
+
+      ## Context
+
+      Provider payloads and time-varying data should not overwrite canonical token identity. The MVP needs append-oriented tables for market, risk, deployer, score, alert, and worker state.
+
+      ## Tasks
+
+      Define Drizzle schema for:
+
+      - `source_observations`
+      - `market_snapshots`
+      - `risk_checks`
+      - `deployer_history_snapshots`
+      - `token_scores`
+      - `alerts`
+      - `worker_runs`
+
+      ## Acceptance Criteria
+
+      - `source_observations` can store raw provider JSON and provider errors.
+      - `market_snapshots` supports repeated observations over time.
+      - `risk_checks` stores nullable risk fields without implying safety.
+      - `deployer_history_snapshots` supports shallow deployer summaries.
+      - `token_scores` stores component scores, overall score, triage label, confidence, reasons, and critical flags.
+      - `alerts` supports high-score and high-risk alert rows.
+      - `worker_runs` supports run status, timestamps, counters, and error metadata.
+      - Snapshot tables do not overwrite prior observations by default.
+
+  - order: 5
+    title: "M1: Add database indexes and unique constraints"
+    labels:
+      - "milestone:m1"
+      - "type:task"
+      - "area:db"
+      - "area:drizzle"
+      - "priority:p0"
+    body: |
+      ## Summary
+
+      Add the indexes and unique constraints needed for idempotent ingestion and latest-feed queries.
+
+      ## Tasks
+
+      Add indexes and constraints for:
+
+      - token identity lookup
+      - pool identity lookup
+      - deployer identity lookup
+      - latest market snapshot per token/pool
+      - latest risk check per token
+      - latest deployer history snapshot
+      - latest token score
+      - alert deduplication
+      - worker run lookup
+
+      ## Acceptance Criteria
+
+      - `tokens(chain_id, address)` is unique.
+      - `pools(chain_id, address)` is unique.
+      - `deployers(chain_id, address)` is unique.
+      - `alerts(dedupe_key)` is unique.
+      - Latest snapshot queries are supported by timestamp-desc indexes.
+      - Feed query prerequisites are represented in the schema.
+      - Constraints do not prevent repeated market, risk, deployer-history, or score snapshots.
+
+  - order: 6
+    title: "M1: Generate and run initial database migration"
+    labels:
+      - "milestone:m1"
+      - "type:task"
+      - "area:db"
+      - "area:drizzle"
+      - "priority:p0"
+    body: |
+      ## Summary
+
+      Generate and run the initial Drizzle migration against local Postgres.
+
+      ## Tasks
+
+      - Generate the initial migration from the Drizzle schema.
+      - Run the migration against local Docker Compose Postgres.
+      - Verify enum types are created before dependent tables.
+      - Verify all required tables are created.
+      - Verify indexes and unique constraints are created.
+      - Document the migration commands if they are not already in the README.
+
+      ## Acceptance Criteria
+
+      - Migration generation succeeds.
+      - Migration execution succeeds against local Postgres.
+      - All M1 tables exist after migration.
+      - All M1 enum types exist after migration.
+      - Re-running migration commands does not corrupt local state.
+      - Any migration caveats are documented.
+
+  - order: 7
+    title: "M1: Add database client package"
+    labels:
+      - "milestone:m1"
+      - "type:task"
+      - "area:db"
+      - "area:drizzle"
+      - "priority:p0"
+    body: |
+      ## Summary
+
+      Add a reusable database client in `packages/db`.
+
+      ## Tasks
+
+      - Create the database client module.
+      - Read `DATABASE_URL` from environment variables.
+      - Export the Drizzle client.
+      - Export schema objects needed by downstream packages.
+      - Ensure the client can be imported by the web app and worker app.
+      - Avoid frontend exposure of server-only database code.
+
+      ## Acceptance Criteria
+
+      - `packages/db` exports a usable database client.
+      - The client connects to local Postgres.
+      - The client can import the Drizzle schema.
+      - The worker can import the db package.
+      - Server-side web/API code can import the db package.
+      - Client-side React components do not import the database client.
+
+  - order: 8
+    title: "M1: Add insert/select database smoke test"
+    labels:
+      - "milestone:m1"
+      - "type:smoke-test"
+      - "area:db"
+      - "priority:p0"
+    body: |
+      ## Summary
+
+      Add a simple local smoke test proving the schema and database client can insert and select MVP records.
+
+      ## Tasks
+
+      - Add a smoke-test script or temporary development command.
+      - Insert a minimal token row.
+      - Insert a minimal deployer row if needed.
+      - Insert a minimal pool row if needed.
+      - Insert at least one append-only snapshot row.
+      - Select the inserted records.
+      - Confirm repeated inserts do not duplicate canonical identity rows.
+
+      ## Acceptance Criteria
+
+      - Smoke test runs against local Postgres.
+      - Insert/select succeeds.
+      - Canonical token identity is not duplicated on repeated input.
+      - Snapshot rows can be appended repeatedly.
+      - Address fields are lowercased by application code before insert.
+      - Smoke test can be removed or kept as a development utility after M1.
+
+  - order: 9
+    title: "M1: Add basic database health query"
+    labels:
+      - "milestone:m1"
+      - "type:task"
+      - "area:db"
+      - "area:health"
+      - "priority:p1"
+    body: |
+      ## Summary
+
+      Add a basic health query that can be used later by `GET /api/health`.
+
+      ## Tasks
+
+      - Add a health query module under `packages/db`.
+      - Verify database connectivity with a lightweight query.
+      - Return basic database status.
+      - Include latest worker run lookup if the `worker_runs` table has data.
+      - Keep the query safe when no worker runs exist yet.
+
+      ## Acceptance Criteria
+
+      - Health query returns `ok` when Postgres is reachable.
+      - Health query returns or throws a clear error when Postgres is unreachable.
+      - Query handles an empty `worker_runs` table.
+      - Query shape is compatible with the planned `/api/health` endpoint.
+      - No external provider APIs are called by the health query.
+
+  - order: 10
+    title: "M1: Document M1 database commands and completion checks"
+    labels:
+      - "milestone:m1"
+      - "type:task"
+      - "area:db"
+      - "priority:p1"
+    body: |
+      ## Summary
+
+      Document the commands needed to run the M1 database workflow locally.
+
+      ## Tasks
+
+      - Document how to start Postgres.
+      - Document how to generate migrations.
+      - Document how to run migrations.
+      - Document how to run the smoke test.
+      - Document how to verify tables exist.
+      - Document known limitations or deferred schema work.
+
+      ## Acceptance Criteria
+
+      - README or a database notes file includes the M1 commands.
+      - A fresh local checkout can run the migration workflow.
+      - A fresh local checkout can run the database smoke test.
+      - Documentation states that provider ingestion is not implemented in M1.
+      - Documentation states that scoring and dashboard feed are not implemented in M1.
+      - Deferred future tables are not accidentally included in M1 scope.
