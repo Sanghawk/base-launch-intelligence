@@ -91,7 +91,48 @@
           "notNull": false
         }
       },
+<<<<<<< HEAD
       "indexes": {},
+=======
+      "indexes": {
+        "alerts_created_at_idx": {
+          "name": "alerts_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "alerts_token_created_at_idx": {
+          "name": "alerts_token_created_at_idx",
+          "columns": [
+            {
+              "expression": "token_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+>>>>>>> refs/remotes/origin/main
       "foreignKeys": {
         "alerts_token_id_tokens_id_fk": {
           "name": "alerts_token_id_tokens_id_fk",
@@ -227,7 +268,33 @@
           "default": "now()"
         }
       },
+<<<<<<< HEAD
       "indexes": {},
+=======
+      "indexes": {
+        "deployer_history_snapshots_deployer_observed_at_idx": {
+          "name": "deployer_history_snapshots_deployer_observed_at_idx",
+          "columns": [
+            {
+              "expression": "deployer_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "observed_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+>>>>>>> refs/remotes/origin/main
       "foreignKeys": {
         "deployer_history_snapshots_deployer_id_deployers_id_fk": {
           "name": "deployer_history_snapshots_deployer_id_deployers_id_fk",
@@ -474,7 +541,54 @@
           "default": "now()"
         }
       },
+<<<<<<< HEAD
       "indexes": {},
+=======
+      "indexes": {
+        "market_snapshots_token_observed_at_idx": {
+          "name": "market_snapshots_token_observed_at_idx",
+          "columns": [
+            {
+              "expression": "token_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "observed_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "market_snapshots_pool_observed_at_idx": {
+          "name": "market_snapshots_pool_observed_at_idx",
+          "columns": [
+            {
+              "expression": "pool_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "observed_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+>>>>>>> refs/remotes/origin/main
       "foreignKeys": {
         "market_snapshots_token_id_tokens_id_fk": {
           "name": "market_snapshots_token_id_tokens_id_fk",
@@ -635,7 +749,27 @@
           "default": "now()"
         }
       },
+<<<<<<< HEAD
       "indexes": {},
+=======
+      "indexes": {
+        "pools_base_token_id_idx": {
+          "name": "pools_base_token_id_idx",
+          "columns": [
+            {
+              "expression": "base_token_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+>>>>>>> refs/remotes/origin/main
       "foreignKeys": {
         "pools_base_token_id_tokens_id_fk": {
           "name": "pools_base_token_id_tokens_id_fk",
@@ -813,7 +947,33 @@
           "default": "now()"
         }
       },
+<<<<<<< HEAD
       "indexes": {},
+=======
+      "indexes": {
+        "risk_checks_token_observed_at_idx": {
+          "name": "risk_checks_token_observed_at_idx",
+          "columns": [
+            {
+              "expression": "token_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "observed_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+>>>>>>> refs/remotes/origin/main
       "foreignKeys": {
         "risk_checks_token_id_tokens_id_fk": {
           "name": "risk_checks_token_id_tokens_id_fk",
@@ -933,7 +1093,45 @@
           "default": "now()"
         }
       },
+<<<<<<< HEAD
       "indexes": {},
+=======
+      "indexes": {
+        "source_observations_entity_fetched_idx": {
+          "name": "source_observations_entity_fetched_idx",
+          "columns": [
+            {
+              "expression": "source",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "entity_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "entity_key",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "fetched_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+>>>>>>> refs/remotes/origin/main
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
@@ -1052,7 +1250,48 @@
           "default": "now()"
         }
       },
+<<<<<<< HEAD
       "indexes": {},
+=======
+      "indexes": {
+        "token_scores_token_scored_at_idx": {
+          "name": "token_scores_token_scored_at_idx",
+          "columns": [
+            {
+              "expression": "token_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "scored_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "token_scores_scored_at_idx": {
+          "name": "token_scores_scored_at_idx",
+          "columns": [
+            {
+              "expression": "scored_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+>>>>>>> refs/remotes/origin/main
       "foreignKeys": {
         "token_scores_token_id_tokens_id_fk": {
           "name": "token_scores_token_id_tokens_id_fk",
@@ -1250,7 +1489,42 @@
           "default": "now()"
         }
       },
+<<<<<<< HEAD
       "indexes": {},
+=======
+      "indexes": {
+        "tokens_first_seen_at_idx": {
+          "name": "tokens_first_seen_at_idx",
+          "columns": [
+            {
+              "expression": "first_seen_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "tokens_deployer_id_idx": {
+          "name": "tokens_deployer_id_idx",
+          "columns": [
+            {
+              "expression": "deployer_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+>>>>>>> refs/remotes/origin/main
       "foreignKeys": {
         "tokens_deployer_id_deployers_id_fk": {
           "name": "tokens_deployer_id_deployers_id_fk",
@@ -1408,7 +1682,48 @@
           "default": "now()"
         }
       },
+<<<<<<< HEAD
       "indexes": {},
+=======
+      "indexes": {
+        "worker_runs_started_at_idx": {
+          "name": "worker_runs_started_at_idx",
+          "columns": [
+            {
+              "expression": "started_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "worker_runs_status_started_at_idx": {
+          "name": "worker_runs_status_started_at_idx",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "started_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+>>>>>>> refs/remotes/origin/main
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
