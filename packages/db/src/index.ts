@@ -4,7 +4,10 @@ export {
   triageLabel,
   alertType,
   alertSeverity,
-  workerRunStatus
+  workerRunStatus,
+  deployers,
+  tokens,
+  pools
 } from './schema.js';
 export type {
   ConfidenceLevel,
@@ -12,6 +15,12 @@ export type {
   TriageLabel,
   AlertType,
   AlertSeverity,
-  WorkerRunStatus
+  WorkerRunStatus,
+  Deployer,
+  NewDeployer,
+  Token,
+  NewToken,
+  Pool,
+  NewPool
 } from './schema.js';
 export { db, pool } from './client.js';
