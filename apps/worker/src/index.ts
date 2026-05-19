@@ -1,6 +1,29 @@
 import { dbClientPlaceholder } from '@base-launch-intelligence/db';
 import type { ChainId } from '@base-launch-intelligence/shared';
 
-const baseChainId: ChainId = 8453;
+import { loadWorkerConfig } from './config.js';
+import { logger } from './logger.js';
+import { startPlaceholderWorkerLoop } from './loop.js';
 
-export { baseChainId, dbClientPlaceholder };
+const baseChainId: ChainId = 8453;
+const config = loadWorkerConfig();
+
+logger.info('Base Launch Intelligence worker starting', {
+  nodeEnv: config.nodeEnv,
+  chainId: baseChainId,
+  dbClientStatus: dbClientPlaceholder.status
+});
+
+const stopWorkerLoop = startPlaceholderWorkerLoop(config);
+
+function shutdown(signal: NodeJS.Signals) {
+  logger.info('Worker shutdown requested', {
+    signal
+  });
+
+  stopWorkerLoop();
+  process.exit(0);
+}
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
