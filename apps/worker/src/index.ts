@@ -1,4 +1,3 @@
-import { dbClientPlaceholder } from '@base-launch-intelligence/db';
 import type { ChainId } from '@base-launch-intelligence/shared';
 
 import { loadWorkerConfig } from './config.js';
@@ -10,8 +9,8 @@ const config = loadWorkerConfig();
 
 logger.info('Base Launch Intelligence worker starting', {
   nodeEnv: config.nodeEnv,
-  chainId: baseChainId,
-  dbClientStatus: dbClientPlaceholder.status
+  chainId: baseChainId
+  // todo: add client status here
 });
 
 const stopWorkerLoop = startPlaceholderWorkerLoop(config);
