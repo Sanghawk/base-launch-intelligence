@@ -1,9 +1,19 @@
-export type DbClientStatus = 'not_configured';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
 
-export type DbClientPlaceholder = {
-  status: DbClientStatus;
-};
+import * as schema from './schema.js';
 
-export const dbClientPlaceholder: DbClientPlaceholder = {
-  status: 'not_configured'
-};
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error('DATABASE_URL is required to initialize the database client');
+}
+
+export const pool = new Pool({
+  connectionString
+});
+
+export const db = drizzle({
+  client: pool,
+  schema
+});
