@@ -1,0 +1,529 @@
+milestone:
+  title: "M2 - Provider Sample Capture"
+  description: "Capture real provider payload samples from DEX Screener and GoPlus (with optional GeckoTerminal and Basescan probes) so that Base Launch Intelligence Console MVP normalization, scoring, and enrichment work can be implemented against confirmed payload shapes."
+
+labels:
+  - name: "milestone:m2"
+    color: "5319e7"
+    description: "Milestone 2: Provider Sample Capture"
+
+  - name: "type:task"
+    color: "0e8a16"
+    description: "Implementation task"
+
+  - name: "type:smoke-test"
+    color: "fbca04"
+    description: "Local validation or smoke test task"
+
+  - name: "type:docs"
+    color: "c5def5"
+    description: "Documentation or notes task"
+
+  - name: "area:worker"
+    color: "5319e7"
+    description: "Worker app, ingestion loop, and worker tooling"
+
+  - name: "area:providers"
+    color: "006b75"
+    description: "Provider clients (DEX Screener, GoPlus, GeckoTerminal, Basescan, Base RPC)"
+
+  - name: "area:samples"
+    color: "c2e0c6"
+    description: "Captured provider payload samples and sample storage"
+
+  - name: "area:docs"
+    color: "bfdadc"
+    description: "Project documentation and notes"
+
+  - name: "priority:p0"
+    color: "b60205"
+    description: "Required for milestone completion"
+
+  - name: "priority:p1"
+    color: "d93f0b"
+    description: "Important but not the first blocker"
+
+  - name: "risk:provider"
+    color: "e99695"
+    description: "Risk: external provider availability or payload variability"
+
+issues:
+  - order: 1
+    title: "M2: Add provider HTTP and sample-capture scaffolding"
+    labels:
+      - "milestone:m2"
+      - "type:task"
+      - "area:worker"
+      - "area:providers"
+      - "priority:p0"
+    body: |
+      ## Summary
+
+      Add the shared scaffolding the worker needs to call external providers and write captured JSON to disk under `apps/worker/src/samples/`.
+
+      ## Context
+
+      Milestone 2 captures real provider payloads before normalization, scoring, or worker-loop work is implemented. Each provider client and capture script will share the same HTTP helper, env wiring, and sample-storage convention, so it is worth setting those up once before the first provider is added.
+
+      ## Tasks
+
+      - Add a small HTTP helper under `apps/worker/src/providers/http.ts` (or equivalent) wrapping `fetch` with timeout, JSON parsing, and error capture.
+      - Read provider base URLs and feature flags from environment variables (`DEXSCREENER_BASE_URL`, `GOPLUS_BASE_URL`, `GECKOTERMINAL_BASE_URL`, `BASESCAN_API_KEY`, `BASE_RPC_URL`, `ENABLE_GECKOTERMINAL`, `ENABLE_BASESCAN`, `ENABLE_BASE_RPC`).
+      - Create the sample directory layout:
+        - `apps/worker/src/samples/dexscreener/`
+        - `apps/worker/src/samples/goplus/`
+        - `apps/worker/src/samples/geckoterminal/`
+        - `apps/worker/src/samples/basescan/`
+      - Add a sample-storage helper under `apps/worker/src/samples/store.ts` (or equivalent) that writes pretty-printed JSON to deterministic, timestamped paths.
+      - Add a `.gitkeep` or README per sample subdirectory so the layout is committed even when empty.
+      - Add a `scripts/` (or equivalent) entry point under `apps/worker/` for capture commands runnable via `pnpm tsx`.
+
+      ## Acceptance Criteria
+
+      - The HTTP helper handles request timeout, non-2xx status, and JSON parse errors without throwing past the caller.
+      - The sample helper writes pretty-printed JSON under the correct provider subdirectory.
+      - Filenames are deterministic and include a timestamp or content hash so reruns do not overwrite prior samples by default.
+      - Provider config is read from environment variables and defaults to the `.env.example` values when unset.
+      - Sample subdirectories are committed (empty placeholders are acceptable).
+      - No database writes occur in this issue.
+      - No real API keys are committed.
+
+      ## Out of Scope
+
+      - Normalization of payloads.
+      - Database inserts.
+      - Scoring or enrichment logic.
+      - Worker loop or scheduling.
+
+  - order: 2
+    title: "M2: Implement thin DEX Screener client"
+    labels:
+      - "milestone:m2"
+      - "type:task"
+      - "area:worker"
+      - "area:providers"
+      - "priority:p0"
+    body: |
+      ## Summary
+
+      Implement a thin DEX Screener client in `apps/worker/src/providers/dexscreener.ts` that wraps the candidate/profile and token-pair endpoints.
+
+      ## Context
+
+      DEX Screener is the primary candidate discovery source and primary market data source for the MVP. The client should return raw provider payloads without normalizing fields, so downstream normalization work in M3 can be written against the captured samples.
+
+      ## Tasks
+
+      - Create `apps/worker/src/providers/dexscreener.ts`.
+      - Implement a method for the latest token profile / candidate endpoint (the source used to discover new Base launches).
+      - Implement a method for fetching token-pair / market data given a token address.
+      - Use the shared HTTP helper from M2-001.
+      - Read the base URL from `DEXSCREENER_BASE_URL`.
+      - Capture per-request errors without throwing past the call site.
+      - Return raw provider payloads to the caller; do not normalize.
+
+      ## Acceptance Criteria
+
+      - `apps/worker/src/providers/dexscreener.ts` exists and exports the candidate and pair fetchers.
+      - All requests use the env-driven base URL.
+      - Errors are captured per-request and surfaced as structured results (not silent failures).
+      - The client does not normalize, transform, or filter payload fields.
+      - The client does not write to the database.
+      - The client respects a basic per-request timeout.
+
+      ## Out of Scope
+
+      - Normalizing tokens, pools, or market snapshots.
+      - Filtering to Base records (handled by the capture script in M2-003).
+      - Persisting payloads to disk (handled by the capture script).
+
+  - order: 3
+    title: "M2: Capture 20+ DEX Screener Base candidate samples"
+    labels:
+      - "milestone:m2"
+      - "type:smoke-test"
+      - "area:worker"
+      - "area:providers"
+      - "area:samples"
+      - "priority:p0"
+    body: |
+      ## Summary
+
+      Capture at least 20 candidate Base token/pair records from DEX Screener and store them as raw JSON under `apps/worker/src/samples/dexscreener/candidates/`.
+
+      ## Context
+
+      The MVP needs confirmation that DEX Screener can supply enough recent Base candidates to drive discovery. Captured samples will be used in M3 to write the normalization layer and in scoring fixtures.
+
+      ## Tasks
+
+      - Add a capture script (e.g. `apps/worker/scripts/capture-dexscreener-candidates.ts`).
+      - Call the DEX Screener candidate/profile endpoint via the M2-002 client.
+      - Filter results to Base chain records (`chain_id = 8453` or DEX Screener's Base chain identifier).
+      - Store each captured record as raw JSON under `apps/worker/src/samples/dexscreener/candidates/`.
+      - Use timestamped filenames so reruns do not overwrite prior samples.
+      - Document the chosen endpoint(s) and any pagination behavior in script comments.
+
+      ## Acceptance Criteria
+
+      - At least 20 Base candidate records are saved as individual JSON files under `apps/worker/src/samples/dexscreener/candidates/`.
+      - Each saved file contains the raw provider payload for that record.
+      - Non-Base records are excluded.
+      - Reruns of the script do not silently overwrite existing samples.
+      - The script can be invoked via a single `pnpm tsx` (or `pnpm --filter worker`) command.
+
+      ## Out of Scope
+
+      - Token-pair / market sample capture (handled in M2-004).
+      - Normalization or database inserts.
+      - Continuous polling.
+
+  - order: 4
+    title: "M2: Capture 5-10 DEX Screener token-pair market samples"
+    labels:
+      - "milestone:m2"
+      - "type:smoke-test"
+      - "area:worker"
+      - "area:providers"
+      - "area:samples"
+      - "priority:p0"
+    body: |
+      ## Summary
+
+      Capture token-pair / market responses for 5-10 Base tokens taken from the DEX Screener candidate samples, and store them under `apps/worker/src/samples/dexscreener/pairs/`.
+
+      ## Context
+
+      Token-pair payloads carry liquidity, volume, FDV, pair age, and quote-asset information that downstream market normalization and liquidity scoring depend on. Capturing these now confirms the shape of those fields before M3.
+
+      ## Tasks
+
+      - Add a capture script (e.g. `apps/worker/scripts/capture-dexscreener-pairs.ts`).
+      - Choose 5-10 Base token addresses from the M2-003 candidate samples (mix of high and low liquidity if possible).
+      - Call the DEX Screener token-pair endpoint via the M2-002 client for each token.
+      - Store each response as raw JSON under `apps/worker/src/samples/dexscreener/pairs/`.
+      - Use deterministic filenames containing the token address (lowercased) and a timestamp.
+      - Note any observed quirks (missing liquidity, missing FDV, unexpected `chainId` casing, multiple pairs per token) in script comments or alongside the samples.
+
+      ## Acceptance Criteria
+
+      - At least 5 (target 10) Base token-pair responses are saved under `apps/worker/src/samples/dexscreener/pairs/`.
+      - Each file contains the raw provider payload.
+      - Token addresses in filenames are lowercased.
+      - Observed missing fields and provider quirks are documented in code comments or a notes file alongside the samples.
+      - Re-running the script does not silently overwrite prior samples.
+
+      ## Out of Scope
+
+      - Selecting a canonical pool (deferred to M7).
+      - Inserting market snapshots into Postgres (deferred to M3).
+      - Liquidity scoring logic.
+
+  - order: 5
+    title: "M2: Implement thin GoPlus client"
+    labels:
+      - "milestone:m2"
+      - "type:task"
+      - "area:worker"
+      - "area:providers"
+      - "priority:p0"
+    body: |
+      ## Summary
+
+      Implement a thin GoPlus client in `apps/worker/src/providers/goplus.ts` that wraps the token-security endpoint for Base.
+
+      ## Context
+
+      GoPlus is the primary contract-risk source for the MVP. The client should pass through raw provider payloads so honeypot, tax, mint, and owner-privilege fields can be inspected before normalization in M5.
+
+      ## Tasks
+
+      - Create `apps/worker/src/providers/goplus.ts`.
+      - Implement a method for the token-security endpoint, taking a chain identifier and one or more token addresses.
+      - Use the shared HTTP helper from M2-001.
+      - Read the base URL from `GOPLUS_BASE_URL`.
+      - Lowercase token addresses before sending them.
+      - Capture per-token errors and rate-limit responses without throwing past the call site.
+      - Return raw provider payloads.
+
+      ## Acceptance Criteria
+
+      - `apps/worker/src/providers/goplus.ts` exists and exports the token-security fetcher.
+      - Requests use the env-driven base URL.
+      - Token addresses are lowercased before being sent.
+      - Errors and rate-limit responses are surfaced as structured results, not silent failures.
+      - The client does not normalize, score, or store payloads.
+      - The client does not write to the database.
+
+      ## Out of Scope
+
+      - Normalizing GoPlus fields (deferred to M5).
+      - Inserting `risk_checks` rows.
+      - Risk scoring logic.
+
+  - order: 6
+    title: "M2: Capture 5-10 GoPlus token-security samples or document failures"
+    labels:
+      - "milestone:m2"
+      - "type:smoke-test"
+      - "area:worker"
+      - "area:providers"
+      - "area:samples"
+      - "priority:p0"
+      - "risk:provider"
+    body: |
+      ## Summary
+
+      Capture token-security responses for 5-10 Base tokens taken from the DEX Screener candidate samples, and store them under `apps/worker/src/samples/goplus/`. If GoPlus is unreliable, document the failure modes instead.
+
+      ## Context
+
+      Stage 3 flagged that GoPlus access may be inconsistent. The MVP is allowed to ship with placeholder risk handling if access fails, but the failure shape must be captured so later normalization can be honest about missing data.
+
+      ## Tasks
+
+      - Add a capture script (e.g. `apps/worker/scripts/capture-goplus-security.ts`).
+      - Pick 5-10 Base token addresses from the M2-003 candidate samples.
+      - Call the GoPlus token-security endpoint via the M2-005 client.
+      - Store each response as raw JSON under `apps/worker/src/samples/goplus/`.
+      - Use filenames containing the lowercased token address and a timestamp.
+      - If responses are empty, rate-limited, or missing expected fields, save the raw response (or error envelope) and document the observed behavior in notes alongside the samples.
+
+      ## Acceptance Criteria
+
+      - At least 5 token-security responses are saved under `apps/worker/src/samples/goplus/`, OR
+      - GoPlus failure modes are documented with at least 5 captured failure samples (raw error or empty payload bodies) and an explanatory note.
+      - Documentation distinguishes between "no risk data" and "safe" so downstream scoring will not default to safety.
+      - Token addresses in filenames are lowercased.
+      - Re-running the script does not silently overwrite prior samples.
+
+      ## Out of Scope
+
+      - Normalizing risk fields (deferred to M5).
+      - Setting a real recheck or staleness policy.
+      - Treating missing GoPlus data as "safe" anywhere in the codebase.
+
+  - order: 7
+    title: "M2: Optional - GeckoTerminal client and probe"
+    labels:
+      - "milestone:m2"
+      - "type:task"
+      - "area:worker"
+      - "area:providers"
+      - "area:samples"
+      - "priority:p1"
+    body: |
+      ## Summary
+
+      Optionally implement a thin GeckoTerminal client in `apps/worker/src/providers/geckoterminal.ts` and capture a small number of sample payloads for Base tokens.
+
+      ## Context
+
+      GeckoTerminal is an optional cross-check source for ambiguous or high-interest tokens. Capturing a few samples now confirms the payload shape without committing to integration.
+
+      ## Tasks
+
+      - Create `apps/worker/src/providers/geckoterminal.ts`.
+      - Implement a method to fetch token or pool data for a Base token address.
+      - Read the base URL from `GECKOTERMINAL_BASE_URL`.
+      - Respect the `ENABLE_GECKOTERMINAL` flag and exit cleanly if disabled.
+      - Add a capture script (e.g. `apps/worker/scripts/capture-geckoterminal.ts`).
+      - Probe 2-5 Base tokens from the M2-003 candidate samples.
+      - Store responses under `apps/worker/src/samples/geckoterminal/`.
+
+      ## Acceptance Criteria
+
+      - The client and capture script exist and run without errors.
+      - When `ENABLE_GECKOTERMINAL=false`, the capture script exits cleanly with a documented note.
+      - When enabled, at least 2 sample payloads are saved (or failure modes are documented if the provider is unreachable).
+      - Token addresses in filenames are lowercased.
+      - No database writes occur.
+
+      ## Out of Scope
+
+      - Building canonical pool cross-check logic (deferred to M7).
+      - Normalizing GeckoTerminal payloads.
+
+  - order: 8
+    title: "M2: Optional - Basescan client and probe"
+    labels:
+      - "milestone:m2"
+      - "type:task"
+      - "area:worker"
+      - "area:providers"
+      - "area:samples"
+      - "priority:p1"
+    body: |
+      ## Summary
+
+      Optionally implement a thin Basescan client in `apps/worker/src/providers/basescan.ts` and capture a small number of contract-creator samples for Base tokens.
+
+      ## Context
+
+      Basescan is the preferred source for deployer resolution. If `BASESCAN_API_KEY` is available, capturing a few samples now confirms the contract-creator payload shape and reduces M6 risk.
+
+      ## Tasks
+
+      - Create `apps/worker/src/providers/basescan.ts`.
+      - Implement a method for contract-creator / `getcontractcreation` lookups.
+      - Read `BASESCAN_API_KEY` from the environment.
+      - Respect the `ENABLE_BASESCAN` flag and exit cleanly if disabled or unkeyed.
+      - Add a capture script (e.g. `apps/worker/scripts/capture-basescan-creators.ts`).
+      - Probe 3-5 Base tokens from the M2-003 candidate samples.
+      - Store responses under `apps/worker/src/samples/basescan/`.
+
+      ## Acceptance Criteria
+
+      - When `ENABLE_BASESCAN=false` or no API key is set, the capture script exits cleanly with a documented note and saves no samples.
+      - When enabled and keyed, at least 3 sample payloads are saved (or failure modes are documented).
+      - No real API key is committed.
+      - Token addresses in filenames are lowercased.
+      - No database writes occur.
+
+      ## Out of Scope
+
+      - Implementing deployer resolution and `deployers` upserts (deferred to M6).
+      - Implementing the `deployer_history_snapshots` computation.
+
+  - order: 9
+    title: "M2: Document provider quirks, sample structure, and capture commands"
+    labels:
+      - "milestone:m2"
+      - "type:docs"
+      - "area:worker"
+      - "area:providers"
+      - "area:samples"
+      - "area:docs"
+      - "priority:p1"
+    body: |
+      ## Summary
+
+      Document the M2 sample directory layout, capture commands, and observed provider quirks so future milestones can write normalization and enrichment code against confirmed payload shapes.
+
+      ## Context
+
+      Stage 5 requires that "missing fields and provider quirks are documented in code comments or README notes." Capturing this once at the end of M2 prevents downstream work from re-discovering the same issues.
+
+      ## Tasks
+
+      - Add or update `apps/worker/src/samples/README.md` (or an equivalent notes file).
+      - Document the sample directory layout for each provider.
+      - Document the exact capture command(s) for each provider.
+      - Document observed provider quirks, including:
+        - Missing or null fields that downstream code must tolerate.
+        - Rate-limit behavior.
+        - Address casing conventions.
+        - Multiple pairs/pools per token.
+        - Chain identifier format differences (`base` vs `8453` vs other).
+      - Cross-link from the root `README.md` to the samples notes if useful.
+
+      ## Acceptance Criteria
+
+      - The samples notes file exists and lists each provider's directory and capture command.
+      - Each provider section records at least one observed quirk or "no quirks observed" if none were found.
+      - A fresh local checkout can run every M2 capture command using only the documented commands.
+      - The notes explicitly state which providers are P0 vs optional in M2.
+
+      ## Out of Scope
+
+      - Building a long-term style guide for provider integrations.
+      - Documenting normalization rules (deferred to M3-M6).
+
+  - order: 10
+    title: "M2: Risk checkpoint - DEX Screener candidate fallback decision"
+    labels:
+      - "milestone:m2"
+      - "type:smoke-test"
+      - "area:worker"
+      - "area:providers"
+      - "area:samples"
+      - "priority:p1"
+      - "risk:provider"
+    body: |
+      ## Summary
+
+      Confirm that DEX Screener provided enough recent Base candidate records during M2, or pick and capture from a documented fallback candidate source.
+
+      ## Context
+
+      The Stage 5 risk checkpoint states:
+
+      > If DEX Screener cannot provide enough recent candidate records, add a bounded Base RPC known-factory polling task or use DEX Screener search/profile flow as a temporary candidate approximation.
+
+      This issue closes the loop on that risk before normalization work begins in M3.
+
+      ## Tasks
+
+      - Review the candidate samples captured in M2-003.
+      - Decide whether DEX Screener candidate coverage is sufficient for v0 (at least 20 recent Base records).
+      - If sufficient, record the decision and any caveats in the M2-009 samples notes.
+      - If insufficient, choose a fallback approach (DEX Screener search/profile flow, bounded Base RPC known-factory polling, or another acceptable approximation), capture a few sample payloads via the same sample-storage convention, and document the chosen approach.
+      - Update `apps/worker/src/samples/README.md` (or equivalent) with the decision and rationale.
+
+      ## Acceptance Criteria
+
+      - Either DEX Screener candidate samples meet the 20+ Base record bar, OR a documented fallback exists with at least a few captured payloads stored under an appropriate `apps/worker/src/samples/` subdirectory.
+      - The decision and rationale are recorded in the samples notes.
+      - The fallback path (if used) does not require unbounded scanning or expensive RPC usage.
+      - No fallback decision silently treats missing data as safety.
+
+      ## Out of Scope
+
+      - Building a permanent factory-polling worker (deferred to M3+).
+      - Inserting candidates into the database.
+      - Changing the M2 milestone scope to include scoring or normalization.
+
+completion_order:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+
+completion_notes: |
+  Recommended completion order and dependency rationale:
+
+  1. M2-001 Provider HTTP and sample-capture scaffolding
+     Sets up the HTTP helper, env wiring, and sample-storage layout that every later issue depends on.
+
+  2. M2-002 DEX Screener client
+     Builds the thin client used by both candidate capture (M2-003) and pair capture (M2-004).
+
+  3. M2-003 DEX Screener candidate samples
+     Produces the 20+ Base candidate records. The candidate sample list is reused by M2-004, M2-006, M2-007, and M2-008 to pick token addresses to probe.
+
+  4. M2-004 DEX Screener token-pair samples
+     Captures market payloads for tokens chosen from M2-003. Depends on the candidate list existing.
+
+  5. M2-005 GoPlus client
+     Adds the thin client used by GoPlus sample capture in M2-006.
+
+  6. M2-006 GoPlus token-security samples
+     Captures risk payloads (or failure modes) for tokens chosen from M2-003. Closes the P0 sample-capture work.
+
+  7. M2-007 GeckoTerminal client and probe (optional)
+     P1 cross-check probe. Independent of M2-008 and can be skipped if the provider is unreachable.
+
+  8. M2-008 Basescan client and probe (optional)
+     P1 deployer-creator probe. Skipped cleanly when `BASESCAN_API_KEY` is unset.
+
+  9. M2-009 Documentation pass
+     Records sample layout, capture commands, and observed quirks. Runs after all P0 and P1 captures so observed behaviors are written down once.
+
+  10. M2-010 DEX Screener candidate fallback decision
+      Closes the Stage 5 risk checkpoint by either accepting DEX Screener candidate coverage or capturing samples from a documented fallback. Runs last because it needs the M2-003 outcome and the M2-009 notes file.
+
+  Hard dependencies:
+    - M2-002 depends on M2-001.
+    - M2-003 and M2-004 depend on M2-002. M2-004 also depends on M2-003 for token selection.
+    - M2-005 depends on M2-001.
+    - M2-006 depends on M2-005 and M2-003.
+    - M2-007 depends on M2-001 and M2-003.
+    - M2-008 depends on M2-001 and M2-003.
+    - M2-009 depends on all preceding capture work.
+    - M2-010 depends on M2-003 and M2-009.
