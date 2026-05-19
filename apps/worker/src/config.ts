@@ -1,6 +1,7 @@
 export type WorkerConfig = {
   nodeEnv: string;
-  placeholderTickIntervalMs: number;
+  pollIntervalMs: number;
+  candidateLimit: number;
 };
 
 function readPositiveIntegerEnv(name: string, fallback: number): number {
@@ -22,9 +23,7 @@ function readPositiveIntegerEnv(name: string, fallback: number): number {
 export function loadWorkerConfig(): WorkerConfig {
   return {
     nodeEnv: process.env.NODE_ENV ?? 'development',
-    placeholderTickIntervalMs: readPositiveIntegerEnv(
-      'WORKER_PLACEHOLDER_TICK_INTERVAL_MS',
-      5000
-    )
+    pollIntervalMs: readPositiveIntegerEnv('WORKER_POLL_INTERVAL_MS', 180000),
+    candidateLimit: readPositiveIntegerEnv('WORKER_CANDIDATE_LIMIT', 50)
   };
 }

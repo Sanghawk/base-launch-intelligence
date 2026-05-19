@@ -13,14 +13,15 @@ function runPlaceholderTick() {
 
 export function startPlaceholderWorkerLoop(config: WorkerConfig) {
   logger.info('Starting worker placeholder loop', {
-    placeholderTickIntervalMs: config.placeholderTickIntervalMs
+    pollIntervalMs: config.pollIntervalMs,
+    candidateLimit: config.candidateLimit
   });
 
   runPlaceholderTick();
 
   const interval = setInterval(() => {
     runPlaceholderTick();
-  }, config.placeholderTickIntervalMs);
+  }, config.pollIntervalMs);
 
   return () => {
     clearInterval(interval);
