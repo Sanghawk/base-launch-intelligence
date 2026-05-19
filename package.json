@@ -1,0 +1,18 @@
+{
+  "name": "base-launch-intelligence",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Private Base launch intelligence console for ranking new Base token launches by quality, risk, liquidity survivability, and deployer context.",
+  "type": "module",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "echo \"No workspace apps configured yet.\"",
+    "build": "echo \"No build configured yet.\"",
+    "test": "echo \"No tests configured yet.\"",
+    "lint": "echo \"No lint configured yet.\"",
+    "format": "echo \"No formatter configured yet.\""
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
