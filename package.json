@@ -9,14 +9,16 @@
     "dev:web": "pnpm --filter web dev",
     "dev:worker": "pnpm --filter worker dev",
     "typecheck": "pnpm -r typecheck",
-    "lint": "echo \"No lint configured yet.\"",
-    "format": "echo \"No formatter configured yet.\""
+    "lint": "echo \"Linting deferred for M0; use pnpm typecheck for now.\"",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
   },
   "engines": {
     "node": ">=20"
   },
   "devDependencies": {
     "@types/node": "^25.8.0",
+    "prettier": "3.8.3",
     "typescript": "^6.0.3"
   }
 }

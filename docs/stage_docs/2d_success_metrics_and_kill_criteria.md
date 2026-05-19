@@ -277,16 +277,16 @@ If the console does not produce better triage than DEX Screener new Base pairs p
 
 ## Specific Kill Criteria
 
-| Kill Criterion | Meaning | Action |
-|---|---|---|
-| No ranking lift over DEX Screener volume sorting | Added complexity is not creating product value. | Narrow or stop. |
-| Analyst still opens DEX Screener first | Product is not becoming the preferred workflow. | Rework feed or stop. |
-| False positives dominate high-priority labels | Ranking is too noisy. | Tighten score thresholds. |
-| Obvious scams pass as good candidates | Risk score is too weak. | Improve risk model before adding features. |
-| Liquidity quality is frequently wrong | Pool/canonicalization logic is unreliable. | Prioritize liquidity model or stop. |
-| Deployer history is unavailable or unhelpful | One core differentiator is weak. | Simplify or replace component. |
-| Alerts are mostly ignored | Alerts are too noisy or not useful. | Reduce alert types and thresholds. |
-| MVP cannot stay narrow | Scope is drifting into a generic terminal. | Cut features aggressively. |
+| Kill Criterion                                   | Meaning                                         | Action                                     |
+| ------------------------------------------------ | ----------------------------------------------- | ------------------------------------------ |
+| No ranking lift over DEX Screener volume sorting | Added complexity is not creating product value. | Narrow or stop.                            |
+| Analyst still opens DEX Screener first           | Product is not becoming the preferred workflow. | Rework feed or stop.                       |
+| False positives dominate high-priority labels    | Ranking is too noisy.                           | Tighten score thresholds.                  |
+| Obvious scams pass as good candidates            | Risk score is too weak.                         | Improve risk model before adding features. |
+| Liquidity quality is frequently wrong            | Pool/canonicalization logic is unreliable.      | Prioritize liquidity model or stop.        |
+| Deployer history is unavailable or unhelpful     | One core differentiator is weak.                | Simplify or replace component.             |
+| Alerts are mostly ignored                        | Alerts are too noisy or not useful.             | Reduce alert types and thresholds.         |
+| MVP cannot stay narrow                           | Scope is drifting into a generic terminal.      | Cut features aggressively.                 |
 
 ## Non-Kill Conditions
 

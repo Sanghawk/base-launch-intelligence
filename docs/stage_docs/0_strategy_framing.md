@@ -213,14 +213,14 @@ Stage 0 is complete if the following statement is clear and accepted:
 
 ## Stage 0 Decision Summary
 
-| Decision Area | Decision |
-|---|---|
-| Primary user | Myself as initial analyst/operator |
-| Use case | Personal monitoring and private research |
-| Ambition level | Research project / portfolio project |
-| Product category | Base-native launch intelligence and monitoring tool |
-| Primary promise | Rank new Base launches by quality and risk |
-| Monetization | No monetization for now |
-| Positioning | Intelligence / monitoring tool |
-| First-version timebox | 2 weeks |
+| Decision Area          | Decision                                                     |
+| ---------------------- | ------------------------------------------------------------ |
+| Primary user           | Myself as initial analyst/operator                           |
+| Use case               | Personal monitoring and private research                     |
+| Ambition level         | Research project / portfolio project                         |
+| Product category       | Base-native launch intelligence and monitoring tool          |
+| Primary promise        | Rank new Base launches by quality and risk                   |
+| Monetization           | No monetization for now                                      |
+| Positioning            | Intelligence / monitoring tool                               |
+| First-version timebox  | 2 weeks                                                      |
 | Hardest strategic risk | Ranking may not outperform public dashboards/manual workflow |

@@ -12,8 +12,18 @@ This repo currently contains root project metadata and placeholder directories. 
 
 ## Planned structure
 
-```text
+````text
 apps/
 packages/
 docs/
-```
+
+## Development scripts
+
+```bash
+pnpm dev:web
+pnpm dev:worker
+pnpm typecheck
+pnpm format
+pnpm format:check
+pnpm lint
+````

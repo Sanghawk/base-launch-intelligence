@@ -23,21 +23,21 @@ The project is a two-week, rough internal research tool. The goal is to validate
 
 ## Summary Decision Table
 
-| Capability | Decision | Rationale |
-|---|---|---|
-| Frontend | Build | Core product surface; use Next.js |
-| Backend/API | Build | Simple Node/TypeScript service/API routes are enough |
-| Rust services | Defer | No known CPU bottleneck yet |
-| Database | Build/use Postgres | Needed for normalized state and snapshots |
-| Launch discovery | Use provider first, build targeted ingestion later | Avoid premature indexer complexity |
-| Market data | Buy/use free provider | DEX Screener and GeckoTerminal are faster than building market aggregation |
-| Contract-risk scanning | Use provider | GoPlus/TokenSniffer faster than custom static analysis |
-| Deployer history | Build basic version | Product-specific scoring input |
-| Canonical pool confidence | Build simple version | Critical to liquidity score quality |
-| Social data | Defer | Farcaster/Neynar is v0.5, not v0 |
-| Alerts | Build basic version | Simple threshold-based alerts are core MVP utility |
-| Execution/trading | Do not build | Explicit non-goal |
-| Self-hosted Base node | Do not build | Too much infra before validation |
+| Capability                | Decision                                           | Rationale                                                                  |
+| ------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------- |
+| Frontend                  | Build                                              | Core product surface; use Next.js                                          |
+| Backend/API               | Build                                              | Simple Node/TypeScript service/API routes are enough                       |
+| Rust services             | Defer                                              | No known CPU bottleneck yet                                                |
+| Database                  | Build/use Postgres                                 | Needed for normalized state and snapshots                                  |
+| Launch discovery          | Use provider first, build targeted ingestion later | Avoid premature indexer complexity                                         |
+| Market data               | Buy/use free provider                              | DEX Screener and GeckoTerminal are faster than building market aggregation |
+| Contract-risk scanning    | Use provider                                       | GoPlus/TokenSniffer faster than custom static analysis                     |
+| Deployer history          | Build basic version                                | Product-specific scoring input                                             |
+| Canonical pool confidence | Build simple version                               | Critical to liquidity score quality                                        |
+| Social data               | Defer                                              | Farcaster/Neynar is v0.5, not v0                                           |
+| Alerts                    | Build basic version                                | Simple threshold-based alerts are core MVP utility                         |
+| Execution/trading         | Do not build                                       | Explicit non-goal                                                          |
+| Self-hosted Base node     | Do not build                                       | Too much infra before validation                                           |
 
 ---
 
@@ -493,26 +493,26 @@ These would pull the product away from the validated MVP: a private Base-native 
 
 ## Market Data Fallbacks
 
-| Primary | Fallback | Last Resort |
-|---|---|---|
+| Primary      | Fallback      | Last Resort                 |
+| ------------ | ------------- | --------------------------- |
 | DEX Screener | GeckoTerminal | Base RPC-derived pool reads |
 
 ## Risk Data Fallbacks
 
-| Primary | Fallback | Last Resort |
-|---|---|---|
-| GoPlus | TokenSniffer | Basescan/manual verification |
+| Primary | Fallback     | Last Resort                  |
+| ------- | ------------ | ---------------------------- |
+| GoPlus  | TokenSniffer | Basescan/manual verification |
 
 ## Deployer Data Fallbacks
 
-| Primary | Fallback | Last Resort |
-|---|---|---|
+| Primary  | Fallback             | Last Resort                         |
+| -------- | -------------------- | ----------------------------------- |
 | Basescan | GoPlus creator field | RPC transaction receipt/manual link |
 
 ## Discovery Fallbacks
 
-| Primary | Fallback | Last Resort |
-|---|---|---|
+| Primary                       | Fallback                 | Last Resort      |
+| ----------------------------- | ------------------------ | ---------------- |
 | DEX Screener recent/new pairs | Known DEX factory events | Manual seed list |
 
 ---

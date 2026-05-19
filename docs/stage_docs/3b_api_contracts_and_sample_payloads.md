@@ -63,7 +63,7 @@ type Token = {
   createdAtBlock: number | null;
   createdAtTimestamp: string | null;
   isVerified: boolean | null;
-  metadataConfidence: "low" | "medium" | "high";
+  metadataConfidence: 'low' | 'medium' | 'high';
 };
 ```
 
@@ -98,7 +98,7 @@ type Pool = {
   pairCreatedAt: string | null;
   source: string;
   isCanonicalCandidate: boolean;
-  canonicalConfidence: "low" | "medium" | "high";
+  canonicalConfidence: 'low' | 'medium' | 'high';
 };
 ```
 
@@ -128,7 +128,7 @@ Point-in-time market observation for a token or pool.
 type MarketSnapshot = {
   tokenAddress: string;
   poolAddress: string | null;
-  source: "dexscreener" | "geckoterminal" | "rpc" | "other";
+  source: 'dexscreener' | 'geckoterminal' | 'rpc' | 'other';
   observedAt: string;
   priceUsd: number | null;
   liquidityUsd: number | null;
@@ -163,7 +163,7 @@ Provider-derived contract and trading-risk assessment.
 ```ts
 type RiskCheck = {
   tokenAddress: string;
-  source: "goplus" | "tokensniffer" | "basescan" | "manual";
+  source: 'goplus' | 'tokensniffer' | 'basescan' | 'manual';
   observedAt: string;
   isHoneypot: boolean | null;
   buyTax: number | null;
@@ -180,7 +180,7 @@ type RiskCheck = {
   top10HolderPct: number | null;
   lpLockedOrBurned: boolean | null;
   scannerScore: number | null;
-  riskLevel: "unknown" | "low" | "medium" | "high" | "critical";
+  riskLevel: 'unknown' | 'low' | 'medium' | 'high' | 'critical';
   rawPayloadId: string;
 };
 ```
@@ -229,8 +229,8 @@ type DeployerHistorySnapshot = {
   priorLaunchCount: number | null;
   verifiedContractCount: number | null;
   suspiciousPriorLaunchCount: number | null;
-  repeatedTemplateConfidence: "unknown" | "low" | "medium" | "high";
-  historyConfidence: "low" | "medium" | "high";
+  repeatedTemplateConfidence: 'unknown' | 'low' | 'medium' | 'high';
+  historyConfidence: 'low' | 'medium' | 'high';
   rawPayloadId: string | null;
 };
 ```
@@ -264,8 +264,13 @@ type TokenScore = {
   liquidityQualityScore: number; // 0-100
   deployerHistoryScore: number; // 0-100
   overallScore: number; // weighted aggregate
-  triageLabel: "Ignore" | "Risky" | "Watch" | "Research Deeper" | "High Priority";
-  confidence: "low" | "medium" | "high";
+  triageLabel:
+    | 'Ignore'
+    | 'Risky'
+    | 'Watch'
+    | 'Research Deeper'
+    | 'High Priority';
+  confidence: 'low' | 'medium' | 'high';
   reasonSummary: string;
   reasonDetails: string[];
 };
@@ -295,9 +300,9 @@ Records emitted alerts.
 type Alert = {
   id: string;
   tokenAddress: string;
-  alertType: "new_high_score_launch" | "obvious_high_risk_launch";
+  alertType: 'new_high_score_launch' | 'obvious_high_risk_launch';
   createdAt: string;
-  severity: "low" | "medium" | "high" | "critical";
+  severity: 'low' | 'medium' | 'high' | 'critical';
   title: string;
   message: string;
   scoreAtAlert: number | null;
@@ -326,7 +331,7 @@ Raw provider payload storage for debugging and auditability.
 type SourceObservation = {
   id: string;
   source: string;
-  entityType: "token" | "pool" | "market_snapshot" | "risk_check" | "deployer";
+  entityType: 'token' | 'pool' | 'market_snapshot' | 'risk_check' | 'deployer';
   entityKey: string;
   fetchedAt: string;
   requestUrl: string | null;
@@ -349,23 +354,23 @@ Primary market-data enrichment source.
 
 ### Expected Fields
 
-| Normalized Field | Expected Provider Field |
-|---|---|
-| chainId | `chainId` |
-| dexId | `dexId` |
-| poolAddress | `pairAddress` |
-| baseTokenAddress | `baseToken.address` |
-| baseTokenName | `baseToken.name` |
-| baseTokenSymbol | `baseToken.symbol` |
-| quoteTokenAddress | `quoteToken.address` |
-| quoteTokenSymbol | `quoteToken.symbol` |
-| priceUsd | `priceUsd` |
-| liquidityUsd | `liquidity.usd` |
-| fdvUsd | `fdv` |
-| marketCapUsd | `marketCap` |
-| pairCreatedAt | `pairCreatedAt` |
-| volume windows | `volume` object |
-| transaction windows | `txns` object |
+| Normalized Field    | Expected Provider Field |
+| ------------------- | ----------------------- |
+| chainId             | `chainId`               |
+| dexId               | `dexId`                 |
+| poolAddress         | `pairAddress`           |
+| baseTokenAddress    | `baseToken.address`     |
+| baseTokenName       | `baseToken.name`        |
+| baseTokenSymbol     | `baseToken.symbol`      |
+| quoteTokenAddress   | `quoteToken.address`    |
+| quoteTokenSymbol    | `quoteToken.symbol`     |
+| priceUsd            | `priceUsd`              |
+| liquidityUsd        | `liquidity.usd`         |
+| fdvUsd              | `fdv`                   |
+| marketCapUsd        | `marketCap`             |
+| pairCreatedAt       | `pairCreatedAt`         |
+| volume windows      | `volume` object         |
+| transaction windows | `txns` object           |
 
 ### Representative Payload Shape
 
@@ -421,16 +426,16 @@ Optional cross-check for pool metadata and canonical pool confidence.
 
 ### Expected Fields
 
-| Normalized Field | Expected Provider Field |
-|---|---|
-| poolAddress | pool ID/address |
-| dexId | DEX relationship/attributes |
-| baseTokenAddress | token relationships |
-| quoteTokenAddress | quote token relationships |
-| priceUsd | attributes price field |
-| liquidityUsd | reserve/liquidity field |
-| volume windows | volume attributes |
-| marketCapUsd | token attributes, if available |
+| Normalized Field  | Expected Provider Field        |
+| ----------------- | ------------------------------ |
+| poolAddress       | pool ID/address                |
+| dexId             | DEX relationship/attributes    |
+| baseTokenAddress  | token relationships            |
+| quoteTokenAddress | quote token relationships      |
+| priceUsd          | attributes price field         |
+| liquidityUsd      | reserve/liquidity field        |
+| volume windows    | volume attributes              |
+| marketCapUsd      | token attributes, if available |
 
 ### Representative Payload Shape
 
@@ -473,20 +478,20 @@ Primary token-security enrichment source if accessible.
 
 ### Expected Fields
 
-| Normalized Field | Expected Provider Concept |
-|---|---|
-| isHoneypot | honeypot flag |
-| buyTax | buy tax field |
-| sellTax | sell tax field |
-| isTaxModifiable | tax modifiable flag |
-| hasBlacklist | blacklist flag |
-| hasWhitelist | whitelist flag |
-| canMint | mintable flag |
-| ownerAddress | owner field |
-| ownershipRenounced | owner/renounced interpretation |
-| lpLockedOrBurned | LP holder/lock fields |
-| topHolderPct | holder distribution fields |
-| isVerified | source code verification if present |
+| Normalized Field   | Expected Provider Concept           |
+| ------------------ | ----------------------------------- |
+| isHoneypot         | honeypot flag                       |
+| buyTax             | buy tax field                       |
+| sellTax            | sell tax field                      |
+| isTaxModifiable    | tax modifiable flag                 |
+| hasBlacklist       | blacklist flag                      |
+| hasWhitelist       | whitelist flag                      |
+| canMint            | mintable flag                       |
+| ownerAddress       | owner field                         |
+| ownershipRenounced | owner/renounced interpretation      |
+| lpLockedOrBurned   | LP holder/lock fields               |
+| topHolderPct       | holder distribution fields          |
+| isVerified         | source code verification if present |
 
 ### Representative Payload Shape
 
@@ -532,13 +537,13 @@ Optional secondary risk scanner.
 
 ### Expected Fields
 
-| Normalized Field | Expected Provider Concept |
-|---|---|
-| scannerScore | token score |
-| riskLevel | scam/spam classification |
-| isHoneypot | trading-risk flag if present |
+| Normalized Field | Expected Provider Concept           |
+| ---------------- | ----------------------------------- |
+| scannerScore     | token score                         |
+| riskLevel        | scam/spam classification            |
+| isHoneypot       | trading-risk flag if present        |
 | lpLockedOrBurned | liquidity lock/burn flag if present |
-| isVerified | source verification flag if present |
+| isVerified       | source verification flag if present |
 
 ### Representative Payload Shape
 
@@ -548,10 +553,7 @@ Optional secondary risk scanner.
   "chainId": 8453,
   "score": 65,
   "riskLevel": "medium",
-  "flags": [
-    "unverified_contract",
-    "high_holder_concentration"
-  ]
+  "flags": ["unverified_contract", "high_holder_concentration"]
 }
 ```
 
@@ -569,13 +571,13 @@ Explorer augmentation for verification and deployer history.
 
 ### Expected Fields
 
-| Normalized Field | Expected Provider Concept |
-|---|---|
-| isVerified | contract source verification |
-| contractCreator | deployer address |
-| creationTxHash | deployment transaction |
-| txlist | deployer transaction history |
-| tokenTransfers | token activity, if used |
+| Normalized Field | Expected Provider Concept    |
+| ---------------- | ---------------------------- |
+| isVerified       | contract source verification |
+| contractCreator  | deployer address             |
+| creationTxHash   | deployment transaction       |
+| txlist           | deployer transaction history |
+| tokenTransfers   | token activity, if used      |
 
 ### Representative Payload Shape
 
@@ -657,11 +659,7 @@ Actual event signatures depend on DEX venue and must be confirmed in Stage 4 or 
 ```json
 {
   "address": "0xFactoryOrTokenAddress",
-  "topics": [
-    "0xeventSignature",
-    "0xindexedTopic1",
-    "0xindexedTopic2"
-  ],
+  "topics": ["0xeventSignature", "0xindexedTopic1", "0xindexedTopic2"],
   "data": "0x...",
   "blockNumber": "0x123",
   "transactionHash": "0x...",
@@ -679,21 +677,21 @@ RPC logs are low-level. Decoding errors should be stored as source-observation e
 
 ## Minimum Ranked Feed Fields
 
-| UI Field | Source Priority |
-|---|---|
-| Token symbol | DEX Screener → RPC metadata |
-| Token address | DEX Screener → RPC |
-| Pool address | DEX Screener → GeckoTerminal → RPC |
-| Pair age | DEX Screener → first observed |
-| Liquidity | DEX Screener → GeckoTerminal |
-| Volume | DEX Screener → GeckoTerminal |
-| Contract risk | GoPlus → TokenSniffer → Basescan |
-| Verified status | Basescan → GoPlus |
-| Deployer | GoPlus creator field → Basescan → RPC receipt |
-| Deployer history | Basescan/API-derived → internal history |
-| Score | Internal |
-| Triage label | Internal |
-| Reason string | Internal |
+| UI Field         | Source Priority                               |
+| ---------------- | --------------------------------------------- |
+| Token symbol     | DEX Screener → RPC metadata                   |
+| Token address    | DEX Screener → RPC                            |
+| Pool address     | DEX Screener → GeckoTerminal → RPC            |
+| Pair age         | DEX Screener → first observed                 |
+| Liquidity        | DEX Screener → GeckoTerminal                  |
+| Volume           | DEX Screener → GeckoTerminal                  |
+| Contract risk    | GoPlus → TokenSniffer → Basescan              |
+| Verified status  | Basescan → GoPlus                             |
+| Deployer         | GoPlus creator field → Basescan → RPC receipt |
+| Deployer history | Basescan/API-derived → internal history       |
+| Score            | Internal                                      |
+| Triage label     | Internal                                      |
+| Reason string    | Internal                                      |
 
 ---
 

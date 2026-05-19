@@ -26,16 +26,16 @@ The model is intentionally rule-based, auditable, and conservative. It is not a 
 
 ## In scope for v0
 
-| Component | Included | Purpose |
-|---|---:|---|
-| Contract risk | Yes | Block or downgrade obvious high-risk launches |
-| Liquidity quality | Yes | Prevent thin, fragile, or misleading liquidity from ranking highly |
-| Deployer history | Yes | Add context on repeat, unknown, or suspicious deployers |
-| Canonical pool confidence | Yes | Prevent wrong-pool selection from corrupting liquidity score |
-| Score confidence | Yes | Make missing or stale data visible |
-| Reason strings | Yes | Make every score inspectable |
-| High-score alerts | Yes | Surface launches worth immediate manual review |
-| High-risk alerts | Yes | Surface severe risk detections |
+| Component                 | Included | Purpose                                                            |
+| ------------------------- | -------: | ------------------------------------------------------------------ |
+| Contract risk             |      Yes | Block or downgrade obvious high-risk launches                      |
+| Liquidity quality         |      Yes | Prevent thin, fragile, or misleading liquidity from ranking highly |
+| Deployer history          |      Yes | Add context on repeat, unknown, or suspicious deployers            |
+| Canonical pool confidence |      Yes | Prevent wrong-pool selection from corrupting liquidity score       |
+| Score confidence          |      Yes | Make missing or stale data visible                                 |
+| Reason strings            |      Yes | Make every score inspectable                                       |
+| High-score alerts         |      Yes | Surface launches worth immediate manual review                     |
+| High-risk alerts          |      Yes | Surface severe risk detections                                     |
 
 ## Out of scope for v0
 
@@ -66,12 +66,12 @@ All component scores use the same convention:
 
 The scores are workflow-ranking scores, not objective measurements of token quality.
 
-| Score | Meaning |
-|---:|---|
-| `contract_risk_score` | Higher means fewer known contract/security concerns. |
-| `liquidity_quality_score` | Higher means stronger, more usable, better-context liquidity. |
-| `deployer_history_score` | Higher means more favorable or less concerning deployer context. |
-| `overall_score` | Weighted combination after hard gates and confidence penalties. |
+|                     Score | Meaning                                                          |
+| ------------------------: | ---------------------------------------------------------------- |
+|     `contract_risk_score` | Higher means fewer known contract/security concerns.             |
+| `liquidity_quality_score` | Higher means stronger, more usable, better-context liquidity.    |
+|  `deployer_history_score` | Higher means more favorable or less concerning deployer context. |
+|           `overall_score` | Weighted combination after hard gates and confidence penalties.  |
 
 ---
 
@@ -102,13 +102,13 @@ These weights should remain static during the first implementation. Changing the
 
 The product supports five labels:
 
-| Label | Meaning |
-|---|---|
-| `Ignore` | Low-quality, too thin, stale, or not worth active monitoring. |
-| `Risky` | Obvious or material structural risk. Review only for research/debugging. |
-| `Watch` | Incomplete or mixed data; not disqualified, but not strong enough for deeper review. |
-| `Research Deeper` | Plausibly worth manual investigation and not obviously disqualified. |
-| `High Priority` | Strongest candidates for immediate manual review. |
+| Label             | Meaning                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------ |
+| `Ignore`          | Low-quality, too thin, stale, or not worth active monitoring.                        |
+| `Risky`           | Obvious or material structural risk. Review only for research/debugging.             |
+| `Watch`           | Incomplete or mixed data; not disqualified, but not strong enough for deeper review. |
+| `Research Deeper` | Plausibly worth manual investigation and not obviously disqualified.                 |
+| `High Priority`   | Strongest candidates for immediate manual review.                                    |
 
 Labels are research workflow states. They are not trading instructions.
 
@@ -143,23 +143,23 @@ Hard downgrades run before ordinary threshold labels.
 
 Assign `Risky` when any critical flag is present:
 
-| Condition | Critical flag |
-|---|---|
-| Honeypot detected | `honeypot_detected` |
-| Sell tax is extremely high | `extreme_sell_tax` |
-| Buy tax is extremely high | `extreme_buy_tax` |
-| Blacklist logic detected | `blacklist_detected` |
-| Whitelist restriction detected | `whitelist_detected` |
-| Mint authority with weak/unknown ownership controls | `mint_authority_risk` |
-| Proxy/upgradeability risk with weak verification | `proxy_upgradeability_risk` |
-| Tax modifiable with non-trivial tax | `modifiable_tax_risk` |
+| Condition                                           | Critical flag               |
+| --------------------------------------------------- | --------------------------- |
+| Honeypot detected                                   | `honeypot_detected`         |
+| Sell tax is extremely high                          | `extreme_sell_tax`          |
+| Buy tax is extremely high                           | `extreme_buy_tax`           |
+| Blacklist logic detected                            | `blacklist_detected`        |
+| Whitelist restriction detected                      | `whitelist_detected`        |
+| Mint authority with weak/unknown ownership controls | `mint_authority_risk`       |
+| Proxy/upgradeability risk with weak verification    | `proxy_upgradeability_risk` |
+| Tax modifiable with non-trivial tax                 | `modifiable_tax_risk`       |
 
 Suggested v0 tax thresholds:
 
-| Field | Medium concern | High concern | Critical concern |
-|---|---:|---:|---:|
-| Buy tax | `> 5%` | `> 10%` | `>= 20%` |
-| Sell tax | `> 5%` | `> 10%` | `>= 20%` |
+| Field    | Medium concern | High concern | Critical concern |
+| -------- | -------------: | -----------: | ---------------: |
+| Buy tax  |         `> 5%` |      `> 10%` |         `>= 20%` |
+| Sell tax |         `> 5%` |      `> 10%` |         `>= 20%` |
 
 These thresholds are deliberately conservative. They should be tuned after observing real Base launches.
 
@@ -229,38 +229,38 @@ Starting at 85 avoids giving every unknown token a perfect safety score while st
 
 ## Penalties
 
-| Condition | Penalty |
-|---|---:|
-| Honeypot true | force `0` and critical flag |
-| Sell tax `>= 20%` | force `0` and critical flag |
-| Buy tax `>= 20%` | `-50` and critical flag |
-| Sell tax `> 10%` | `-35` |
-| Buy tax `> 10%` | `-25` |
-| Sell tax `> 5%` | `-15` |
-| Buy tax `> 5%` | `-10` |
-| Tax modifiable true and buy/sell tax > 0 | `-35` |
-| Tax modifiable true and taxes unknown | `-25` |
-| Blacklist true | force max score `20` and critical flag |
-| Whitelist true | force max score `20` and critical flag |
-| Can mint true and ownership not renounced | `-35` |
-| Can mint true and owner unknown | `-30` |
-| Owner/admin present and not renounced | `-15` |
-| Proxy true and not verified | `-25` |
-| Contract not verified / not open source | `-15` |
-| Top holder pct `> 20%` | `-20` |
-| Top holder pct `> 10%` | `-10` |
-| Top 10 holder pct `> 50%` | `-15` |
-| LP not locked/burned when available | `-10` |
-| Risk scanner unavailable | `-20` confidence penalty, not score penalty unless no other risk data exists |
+| Condition                                 |                                                                      Penalty |
+| ----------------------------------------- | ---------------------------------------------------------------------------: |
+| Honeypot true                             |                                                  force `0` and critical flag |
+| Sell tax `>= 20%`                         |                                                  force `0` and critical flag |
+| Buy tax `>= 20%`                          |                                                      `-50` and critical flag |
+| Sell tax `> 10%`                          |                                                                        `-35` |
+| Buy tax `> 10%`                           |                                                                        `-25` |
+| Sell tax `> 5%`                           |                                                                        `-15` |
+| Buy tax `> 5%`                            |                                                                        `-10` |
+| Tax modifiable true and buy/sell tax > 0  |                                                                        `-35` |
+| Tax modifiable true and taxes unknown     |                                                                        `-25` |
+| Blacklist true                            |                                       force max score `20` and critical flag |
+| Whitelist true                            |                                       force max score `20` and critical flag |
+| Can mint true and ownership not renounced |                                                                        `-35` |
+| Can mint true and owner unknown           |                                                                        `-30` |
+| Owner/admin present and not renounced     |                                                                        `-15` |
+| Proxy true and not verified               |                                                                        `-25` |
+| Contract not verified / not open source   |                                                                        `-15` |
+| Top holder pct `> 20%`                    |                                                                        `-20` |
+| Top holder pct `> 10%`                    |                                                                        `-10` |
+| Top 10 holder pct `> 50%`                 |                                                                        `-15` |
+| LP not locked/burned when available       |                                                                        `-10` |
+| Risk scanner unavailable                  | `-20` confidence penalty, not score penalty unless no other risk data exists |
 
 ## Positive adjustments
 
-| Condition | Adjustment |
-|---|---:|
-| Open source / verified true | `+5` |
-| Ownership renounced true | `+5` |
-| LP locked or burned true | `+5` |
-| No honeypot, low taxes, no blacklist, no mint, verified | `+5` |
+| Condition                                               | Adjustment |
+| ------------------------------------------------------- | ---------: |
+| Open source / verified true                             |       `+5` |
+| Ownership renounced true                                |       `+5` |
+| LP locked or burned true                                |       `+5` |
+| No honeypot, low taxes, no blacklist, no mint, verified |       `+5` |
 
 Positive adjustments are capped so they cannot erase severe structural concerns.
 
@@ -276,13 +276,13 @@ contract_risk_score = clamp(contract_risk_score, 0, 100)
 
 If using a normalized `risk_level` from a provider, treat it as advisory evidence:
 
-| Provider risk level | Score cap |
-|---|---:|
-| `critical` | `20` |
-| `high` | `40` |
-| `medium` | `70` |
-| `low` | no cap |
-| `unknown` | no cap, but lower confidence |
+| Provider risk level |                    Score cap |
+| ------------------- | ---------------------------: |
+| `critical`          |                         `20` |
+| `high`              |                         `40` |
+| `medium`            |                         `70` |
+| `low`               |                       no cap |
+| `unknown`           | no cap, but lower confidence |
 
 Provider risk levels should not replace field-level scoring.
 
@@ -323,37 +323,37 @@ Start from a liquidity tier, then adjust.
 
 ## Liquidity tier score
 
-| Liquidity USD | Base score |
-|---:|---:|
-| Missing | `20` |
-| `< 1,000` | `10` |
-| `1,000–4,999` | `25` |
-| `5,000–14,999` | `45` |
-| `15,000–49,999` | `65` |
-| `50,000–149,999` | `80` |
-| `>= 150,000` | `90` |
+|    Liquidity USD | Base score |
+| ---------------: | ---------: |
+|          Missing |       `20` |
+|        `< 1,000` |       `10` |
+|    `1,000–4,999` |       `25` |
+|   `5,000–14,999` |       `45` |
+|  `15,000–49,999` |       `65` |
+| `50,000–149,999` |       `80` |
+|     `>= 150,000` |       `90` |
 
 These thresholds should be tuned after observing actual launch distributions.
 
 ## Quote-asset adjustment
 
-| Quote asset | Adjustment |
-|---|---:|
-| `WETH` | `+8` |
-| `USDC` | `+8` |
-| `USDbC` | `+4` |
-| `DAI` | `+3` |
-| `cbBTC` | `+2` |
-| Unknown / obscure | `-10` |
+| Quote asset       | Adjustment |
+| ----------------- | ---------: |
+| `WETH`            |       `+8` |
+| `USDC`            |       `+8` |
+| `USDbC`           |       `+4` |
+| `DAI`             |       `+3` |
+| `cbBTC`           |       `+2` |
+| Unknown / obscure |      `-10` |
 
 ## Venue adjustment
 
-| Venue context | Adjustment |
-|---|---:|
-| Known major Base DEX | `+5` |
-| Known launch platform / expected pool source | `+3` |
-| Unknown venue | `-8` |
-| Provider venue missing | `-10` |
+| Venue context                                | Adjustment |
+| -------------------------------------------- | ---------: |
+| Known major Base DEX                         |       `+5` |
+| Known launch platform / expected pool source |       `+3` |
+| Unknown venue                                |       `-8` |
+| Provider venue missing                       |      `-10` |
 
 Known major Base DEX examples for v0:
 
@@ -368,11 +368,11 @@ This list should live in config, not hard-coded in scoring functions.
 
 ## Canonical-pool confidence adjustment
 
-| Canonical confidence | Adjustment |
-|---|---:|
-| `high` | `+5` |
-| `medium` | `0` |
-| `low` | `-25` and cap liquidity score at `60` |
+| Canonical confidence |                            Adjustment |
+| -------------------- | ------------------------------------: |
+| `high`               |                                  `+5` |
+| `medium`             |                                   `0` |
+| `low`                | `-25` and cap liquidity score at `60` |
 
 If the canonical pool is low-confidence, the model should not produce a high-confidence liquidity score.
 
@@ -389,13 +389,13 @@ volume_liquidity_ratio_24h = volume_24h_usd / liquidity_usd
 
 Suggested adjustments:
 
-| Condition | Adjustment |
-|---|---:|
-| Missing volume and token is new | `0` |
-| Missing volume and token is not new | `-10` |
-| Moderate volume with adequate liquidity | `+5` |
-| Very high volume/liquidity ratio on thin liquidity | `-10` |
-| Absurd ratio suggesting wash/noise | `-20` |
+| Condition                                                 |                      Adjustment |
+| --------------------------------------------------------- | ------------------------------: |
+| Missing volume and token is new                           |                             `0` |
+| Missing volume and token is not new                       |                           `-10` |
+| Moderate volume with adequate liquidity                   |                            `+5` |
+| Very high volume/liquidity ratio on thin liquidity        |                           `-10` |
+| Absurd ratio suggesting wash/noise                        |                           `-20` |
 | Transactions exist but buys/sells are extremely one-sided | `-5` to `-15` depending context |
 
 Suggested v0 suspicious thresholds:
@@ -409,13 +409,13 @@ These are not proof of manipulation. They are reason-string inputs and scoring p
 
 ## Age adjustment
 
-| Pair age | Adjustment |
-|---|---:|
-| Missing | `-5` |
-| `< 15 minutes` | `0` |
-| `15 minutes–6 hours` | `+3` |
-| `6–24 hours` and liquidity still present | `+5` |
-| `> 24 hours` and stagnant/low activity | `-5` |
+| Pair age                                 | Adjustment |
+| ---------------------------------------- | ---------: |
+| Missing                                  |       `-5` |
+| `< 15 minutes`                           |        `0` |
+| `15 minutes–6 hours`                     |       `+3` |
+| `6–24 hours` and liquidity still present |       `+5` |
+| `> 24 hours` and stagnant/low activity   |       `-5` |
 
 Do not penalize very new launches too heavily solely for age.
 
@@ -459,28 +459,28 @@ Rationale: unknown deployers should not be treated as bad by default, but they s
 
 ## Adjustments
 
-| Condition | Adjustment |
-|---|---:|
-| Deployer unknown | `-10` and lower confidence |
-| New deployer, no suspicious data | `0` |
-| Repeat deployer seen internally 2–4 times, no suspicious history | `+5` |
-| Repeat deployer seen internally 5+ times, no suspicious history | `+10` |
-| Prior verified contracts available | `+5` |
-| Known positive manual/provider label | `+15` |
-| Suspicious prior launch count `>= 1` | `-25` |
-| Suspicious prior launch count `>= 3` | `-45` |
-| Repeated template confidence high and prior outcomes unknown | `-10` |
-| Very high launch cadence with weak liquidity outcomes | `-20` |
-| External history unavailable | confidence penalty, not score penalty |
+| Condition                                                        |                            Adjustment |
+| ---------------------------------------------------------------- | ------------------------------------: |
+| Deployer unknown                                                 |            `-10` and lower confidence |
+| New deployer, no suspicious data                                 |                                   `0` |
+| Repeat deployer seen internally 2–4 times, no suspicious history |                                  `+5` |
+| Repeat deployer seen internally 5+ times, no suspicious history  |                                 `+10` |
+| Prior verified contracts available                               |                                  `+5` |
+| Known positive manual/provider label                             |                                 `+15` |
+| Suspicious prior launch count `>= 1`                             |                                 `-25` |
+| Suspicious prior launch count `>= 3`                             |                                 `-45` |
+| Repeated template confidence high and prior outcomes unknown     |                                 `-10` |
+| Very high launch cadence with weak liquidity outcomes            |                                 `-20` |
+| External history unavailable                                     | confidence penalty, not score penalty |
 
 ## Score caps
 
-| Condition | Score cap |
-|---|---:|
-| Suspicious prior launch count `>= 3` | `35` |
-| Deployer unknown | `60` |
-| History confidence low | `70` |
-| Known suspicious manual/provider label | `25` |
+| Condition                              | Score cap |
+| -------------------------------------- | --------: |
+| Suspicious prior launch count `>= 3`   |      `35` |
+| Deployer unknown                       |      `60` |
+| History confidence low                 |      `70` |
+| Known suspicious manual/provider label |      `25` |
 
 ## Deployer score bounds
 
@@ -506,11 +506,11 @@ type ComponentConfidence = 'low' | 'medium' | 'high';
 
 ## Contract-risk confidence
 
-| Condition | Confidence |
-|---|---|
-| Fresh scanner result with key fields present | `high` |
-| Scanner result present but several fields missing | `medium` |
-| Scanner unavailable or stale | `low` |
+| Condition                                         | Confidence |
+| ------------------------------------------------- | ---------- |
+| Fresh scanner result with key fields present      | `high`     |
+| Scanner result present but several fields missing | `medium`   |
+| Scanner unavailable or stale                      | `low`      |
 
 Important key fields:
 
@@ -526,11 +526,11 @@ owner/admin
 
 ## Liquidity confidence
 
-| Condition | Confidence |
-|---|---|
-| Fresh market data + high canonical-pool confidence | `high` |
-| Fresh market data + medium canonical-pool confidence | `medium` |
-| Stale/missing market data or low canonical confidence | `low` |
+| Condition                                             | Confidence |
+| ----------------------------------------------------- | ---------- |
+| Fresh market data + high canonical-pool confidence    | `high`     |
+| Fresh market data + medium canonical-pool confidence  | `medium`   |
+| Stale/missing market data or low canonical confidence | `low`      |
 
 Suggested freshness:
 
@@ -542,11 +542,11 @@ cold/ignored tokens: snapshot may be older but should be shown as stale
 
 ## Deployer confidence
 
-| Condition | Confidence |
-|---|---|
-| Deployer resolved + internal/external history available | `high` |
-| Deployer resolved + only internal history available | `medium` |
-| Deployer unknown or history unavailable | `low` |
+| Condition                                               | Confidence |
+| ------------------------------------------------------- | ---------- |
+| Deployer resolved + internal/external history available | `high`     |
+| Deployer resolved + only internal history available     | `medium`   |
+| Deployer unknown or history unavailable                 | `low`      |
 
 ## Overall confidence
 
@@ -565,22 +565,22 @@ if deployerConfidence = low:
 
 Suggested mapping:
 
-| Component confidences | Overall |
-|---|---|
-| All high | `high` |
-| Two high, one medium | `high` |
-| One or more low but no critical missing field | `medium` |
-| Contract risk low or liquidity low | max `medium` |
-| Contract risk low and liquidity low | `low` |
-| No risk check and no market snapshot | `low` |
+| Component confidences                         | Overall      |
+| --------------------------------------------- | ------------ |
+| All high                                      | `high`       |
+| Two high, one medium                          | `high`       |
+| One or more low but no critical missing field | `medium`     |
+| Contract risk low or liquidity low            | max `medium` |
+| Contract risk low and liquidity low           | `low`        |
+| No risk check and no market snapshot          | `low`        |
 
 ## Confidence effects on label
 
-| Confidence | Label impact |
-|---|---|
-| `high` | Eligible for `High Priority` |
-| `medium` | Eligible for `Research Deeper`; eligible for `High Priority` only if score is very strong and no critical unknowns |
-| `low` | Usually `Watch`, `Ignore`, or `Risky`; not eligible for `High Priority` |
+| Confidence | Label impact                                                                                                       |
+| ---------- | ------------------------------------------------------------------------------------------------------------------ |
+| `high`     | Eligible for `High Priority`                                                                                       |
+| `medium`   | Eligible for `Research Deeper`; eligible for `High Priority` only if score is very strong and no critical unknowns |
+| `low`      | Usually `Watch`, `Ignore`, or `Risky`; not eligible for `High Priority`                                            |
 
 ---
 
@@ -675,10 +675,10 @@ AND no previous active alert exists for this token and alert type
 
 Alert severity:
 
-| Score | Severity |
-|---:|---|
-| `80–89` | `high` |
-| `90+` | `critical` only if all component confidence is high |
+|   Score | Severity                                            |
+| ------: | --------------------------------------------------- |
+| `80–89` | `high`                                              |
+|   `90+` | `critical` only if all component confidence is high |
 
 Use `critical` sparingly.
 
@@ -706,12 +706,12 @@ modifiable_tax_risk
 
 Alert severity:
 
-| Condition | Severity |
-|---|---|
-| Honeypot or blacklist | `critical` |
-| Extreme sell tax | `critical` |
-| Mint/admin/proxy critical risk | `high` |
-| Multiple high-risk flags | `critical` |
+| Condition                      | Severity   |
+| ------------------------------ | ---------- |
+| Honeypot or blacklist          | `critical` |
+| Extreme sell tax               | `critical` |
+| Mint/admin/proxy critical risk | `high`     |
+| Multiple high-risk flags       | `critical` |
 
 ---
 
@@ -767,15 +767,15 @@ Example:
 
 ## Missing Data Rules
 
-| Missing field | Behavior |
-|---|---|
-| Missing risk check | Risk confidence low; cannot be `High Priority`; reason must mention unknown risk data. |
-| Missing liquidity | Liquidity score low; likely `Ignore` or `Watch`. |
-| Missing deployer | Deployer score neutral-low; confidence penalty; do not force `Risky`. |
-| Missing pair age | Small liquidity confidence penalty. |
-| Missing market cap / FDV | Do not use cap-ratio rules. |
-| Missing LP lock | Do not assume unlocked; mention if relevant. |
-| Missing canonical pool | Liquidity confidence low; cannot be `High Priority`. |
+| Missing field            | Behavior                                                                               |
+| ------------------------ | -------------------------------------------------------------------------------------- |
+| Missing risk check       | Risk confidence low; cannot be `High Priority`; reason must mention unknown risk data. |
+| Missing liquidity        | Liquidity score low; likely `Ignore` or `Watch`.                                       |
+| Missing deployer         | Deployer score neutral-low; confidence penalty; do not force `Risky`.                  |
+| Missing pair age         | Small liquidity confidence penalty.                                                    |
+| Missing market cap / FDV | Do not use cap-ratio rules.                                                            |
+| Missing LP lock          | Do not assume unlocked; mention if relevant.                                           |
+| Missing canonical pool   | Liquidity confidence low; cannot be `High Priority`.                                   |
 
 ---
 
@@ -837,26 +837,27 @@ type TokenScoreResult = {
 
 function scoreToken(input: ScoreInput): TokenScoreResult {
   const contract = scoreContractRisk(input.riskCheck, input.token);
-  const liquidity = scoreLiquidityQuality(input.marketSnapshot, input.canonicalPool);
+  const liquidity = scoreLiquidityQuality(
+    input.marketSnapshot,
+    input.canonicalPool
+  );
   const deployer = scoreDeployerHistory(input.deployerHistory, input.token);
 
   const criticalFlags = [
     ...contract.criticalFlags,
     ...liquidity.criticalFlags,
-    ...deployer.criticalFlags,
+    ...deployer.criticalFlags
   ];
 
   let overallScore =
-    contract.score * 0.4 +
-    liquidity.score * 0.4 +
-    deployer.score * 0.2;
+    contract.score * 0.4 + liquidity.score * 0.4 + deployer.score * 0.2;
 
   overallScore = clamp(overallScore, 0, 100);
 
   const confidence = computeOverallConfidence([
     contract.confidence,
     liquidity.confidence,
-    deployer.confidence,
+    deployer.confidence
   ]);
 
   const triageLabel = assignTriageLabel({
@@ -866,7 +867,7 @@ function scoreToken(input: ScoreInput): TokenScoreResult {
     deployerHistoryScore: deployer.score,
     confidence,
     criticalFlags,
-    canonicalConfidence: input.canonicalPool?.canonicalConfidence ?? 'low',
+    canonicalConfidence: input.canonicalPool?.canonicalConfidence ?? 'low'
   });
 
   return buildScoreResult({
@@ -876,7 +877,7 @@ function scoreToken(input: ScoreInput): TokenScoreResult {
     overallScore,
     triageLabel,
     confidence,
-    criticalFlags,
+    criticalFlags
   });
 }
 ```
@@ -957,14 +958,14 @@ During MVP/internal alpha, validate scoring against two baselines:
 
 Track:
 
-| Metric | Question |
-|---|---|
-| Obvious-risk capture | Are severe-risk launches consistently labeled `Risky`? |
-| High-priority precision | Are `High Priority` rows actually worth manual review? |
+| Metric                     | Question                                                    |
+| -------------------------- | ----------------------------------------------------------- |
+| Obvious-risk capture       | Are severe-risk launches consistently labeled `Risky`?      |
+| High-priority precision    | Are `High Priority` rows actually worth manual review?      |
 | Research-deeper usefulness | Are `Research Deeper` rows better than random new launches? |
-| False positive rate | Are noisy/thin/unsafe launches ranking too highly? |
-| False negative review | Are interesting launches being buried as `Ignore`? |
-| Reason quality | Can the analyst understand and challenge each label? |
+| False positive rate        | Are noisy/thin/unsafe launches ranking too highly?          |
+| False negative review      | Are interesting launches being buried as `Ignore`?          |
+| Reason quality             | Can the analyst understand and challenge each label?        |
 
 ## Initial tuning rules
 

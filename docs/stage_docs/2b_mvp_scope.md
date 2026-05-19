@@ -15,6 +15,7 @@ The product should help answer:
 > Which new Base launches deserve deeper investigation, and which should be ignored or treated as risky?
 
 ## Scope Philosophy
+
 c
 The MVP should be a narrow vertical slice, not a broad dashboard.
 
@@ -185,35 +186,35 @@ The following are explicitly out of scope for v0:
 
 ## Must-Have Features
 
-| Feature | Required? | Notes |
-|---|---:|---|
-| Ranked launch feed | Yes | Main product surface. |
-| Contract-risk score | Yes | Mandatory trust layer. |
-| Liquidity-quality score | Yes | Primary structural filter. |
-| Deployer-history score | Yes | Highest-value differentiator for triage. |
-| Triage labels | Yes | Makes score actionable. |
-| Reason strings | Yes | Required for trust and debugging. |
-| Basic alerts | Yes | Only high-score and high-risk. |
-| 1–5 minute freshness | Yes | Fast enough for monitoring. |
+| Feature                 | Required? | Notes                                    |
+| ----------------------- | --------: | ---------------------------------------- |
+| Ranked launch feed      |       Yes | Main product surface.                    |
+| Contract-risk score     |       Yes | Mandatory trust layer.                   |
+| Liquidity-quality score |       Yes | Primary structural filter.               |
+| Deployer-history score  |       Yes | Highest-value differentiator for triage. |
+| Triage labels           |       Yes | Makes score actionable.                  |
+| Reason strings          |       Yes | Required for trust and debugging.        |
+| Basic alerts            |       Yes | Only high-score and high-risk.           |
+| 1–5 minute freshness    |       Yes | Fast enough for monitoring.              |
 
 ## Should-Have Features
 
-| Feature | Priority | Notes |
-|---|---:|---|
-| Basic canonical-pool confidence | High | Required to avoid bad liquidity interpretation. |
-| DEX Screener comparison link | High | Helps validate against baseline. |
-| Raw source timestamps | High | Helps debug stale data. |
-| Score component breakdown | High | Needed for explainability. |
-| Manual override notes | Medium | Useful but not mandatory. |
+| Feature                         | Priority | Notes                                           |
+| ------------------------------- | -------: | ----------------------------------------------- |
+| Basic canonical-pool confidence |     High | Required to avoid bad liquidity interpretation. |
+| DEX Screener comparison link    |     High | Helps validate against baseline.                |
+| Raw source timestamps           |     High | Helps debug stale data.                         |
+| Score component breakdown       |     High | Needed for explainability.                      |
+| Manual override notes           |   Medium | Useful but not mandatory.                       |
 
 ## Could-Have Features
 
-| Feature | Notes |
-|---|---|
-| CSV export | Useful for validation, but not core. |
-| Saved watchlist | Helpful after v0 is usable. |
-| Simple filtering by label | Useful if table grows quickly. |
-| Simple sorting by score/risk/liquidity | Useful but not central. |
+| Feature                                | Notes                                |
+| -------------------------------------- | ------------------------------------ |
+| CSV export                             | Useful for validation, but not core. |
+| Saved watchlist                        | Helpful after v0 is usable.          |
+| Simple filtering by label              | Useful if table grows quickly.       |
+| Simple sorting by score/risk/liquidity | Useful but not central.              |
 
 ## Deferred Features
 
