@@ -17,12 +17,18 @@ importers:
 
   apps/web:
     dependencies:
+      '@base-launch-intelligence/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@base-launch-intelligence/shared':
         specifier: workspace:*
         version: link:../../packages/shared
 
   apps/worker:
     dependencies:
+      '@base-launch-intelligence/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@base-launch-intelligence/shared':
         specifier: workspace:*
         version: link:../../packages/shared
